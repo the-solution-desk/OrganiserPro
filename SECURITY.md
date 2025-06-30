@@ -39,4 +39,4 @@ When using this software, please follow these security best practices:
 
 ## Security Advisories
 
-Security advisories for this project will be published in the [GitHub Security Advisories](https://github.com/the-solution-desk/fileorganizer/security/advisories) section of the repository.
+Security advisories for this project will be published in the [GitHub Security Advisories](https://github.com/the-solution-desk/OrganiserPro/security/advisories) section of the repository.

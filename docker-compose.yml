@@ -1,17 +1,17 @@
 version: '3.8'
 
 services:
-  fileorganizer:
+  OrganiserPro:
     build:
       context: .
       target: runtime
     volumes:
       - .:/app
-      - fileorganizer-data:/data
+      - OrganiserPro-data:/data
     working_dir: /app
     environment:
       - PYTHONUNBUFFERED=1
-    entrypoint: ["fileorganizer"]
+    entrypoint: ["OrganiserPro"]
     command: ["--help"]
 
   dev:
@@ -20,7 +20,7 @@ services:
       target: builder
     volumes:
       - .:/app
-      - fileorganizer-data:/data
+      - OrganiserPro-data:/data
     working_dir: /app
     environment:
       - PYTHONUNBUFFERED=1
@@ -37,7 +37,7 @@ services:
     working_dir: /app
     environment:
       - PYTHONUNBUFFERED=1
-    command: ["pytest", "-v", "--cov=fileorganizer", "--cov-report=term-missing"]
+    command: ["pytest", "-v", "--cov=OrganiserPro", "--cov-report=term-missing"]
 
   lint:
     build:
@@ -48,7 +48,7 @@ services:
     working_dir: /app
     environment:
       - PYTHONUNBUFFERED=1
-    command: ["bash", "-c", "black --check fileorganizer tests && flake8 fileorganizer tests && isort --check-only fileorganizer tests"]
+    command: ["bash", "-c", "black --check OrganiserPro tests && flake8 OrganiserPro tests && isort --check-only OrganiserPro tests"]
 
   typecheck:
     build:
@@ -59,7 +59,7 @@ services:
     working_dir: /app
     environment:
       - PYTHONUNBUFFERED=1
-    command: ["mypy", "--strict", "--ignore-missing-imports", "fileorganizer"]
+    command: ["mypy", "--strict", "--ignore-missing-imports", "OrganiserPro"]
 
   docs:
     build:
@@ -75,4 +75,4 @@ services:
       - "8000:8000"
 
 volumes:
-  fileorganizer-data:
+  OrganiserPro-data:

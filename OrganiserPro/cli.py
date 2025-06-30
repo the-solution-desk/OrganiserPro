@@ -25,7 +25,7 @@ def cli(ctx):
         # Show help if no subcommand is provided
         console.print(Panel.fit(
             "[bold blue]FileOrganizer[/] - Organize your files with ease\n\n"
-            "[yellow]Usage:[/] fileorganizer [OPTIONS] COMMAND [ARGS]...\n\n"
+            "[yellow]Usage:[/] OrganiserPro [OPTIONS] COMMAND [ARGS]...\n\n"
             "[bold]Commands:[/]\n"
             "  sort     Sort files by type, date, or size\n"
             "  dedupe   Find and remove duplicate files\n"
@@ -34,7 +34,7 @@ def cli(ctx):
             title="FileOrganizer",
             border_style="blue"
         ))
-        console.print("\nRun 'fileorganizer COMMAND --help' for more information on a command.")
+        console.print("\nRun 'OrganiserPro COMMAND --help' for more information on a command.")
 
 # Sort command
 @cli.command()

@@ -39,7 +39,7 @@ RUN useradd -m appuser && chown -R appuser:appuser /app
 USER appuser
 
 # Set the entrypoint
-ENTRYPOINT ["fileorganizer"]
+ENTRYPOINT ["OrganiserPro"]
 CMD ["--help"]
 
 # Build a smaller runtime image
@@ -57,7 +57,7 @@ WORKDIR /app
 COPY --from=builder /home/appuser/.local /home/appuser/.local
 
 # Copy the application
-COPY --from=builder /app/fileorganizer /app/fileorganizer
+COPY --from=builder /app/OrganiserPro /app/OrganiserPro
 COPY --from=builder /app/README.md /app/
 COPY --from=builder /app/requirements.txt /app/
 
@@ -69,5 +69,5 @@ USER appuser
 ENV PATH="/home/appuser/.local/bin:${PATH}"
 
 # Set the entrypoint
-ENTRYPOINT ["fileorganizer"]
+ENTRYPOINT ["OrganiserPro"]
 CMD ["--help"]

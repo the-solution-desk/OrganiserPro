@@ -13,22 +13,22 @@ This document provides detailed information about the FileOrganizer API. It's in
 Core Modules
 -----------
 
-.. automodule:: fileorganizer.cli
+.. automodule:: OrganiserPro.cli
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: fileorganizer.dedupe
+.. automodule:: OrganiserPro.dedupe
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: fileorganizer.sorter
+.. automodule:: OrganiserPro.sorter
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: fileorganizer.encryptor
+.. automodule:: OrganiserPro.encryptor
    :members:
    :undoc-members:
    :show-inheritance:
@@ -36,15 +36,15 @@ Core Modules
 Command Line Interface
 ---------------------
 
-.. click:: fileorganizer.cli:cli
-   :prog: fileorganizer
+.. click:: OrganiserPro.cli:cli
+   :prog: OrganiserPro
    :nested: full
    :show-nested:
 
 Exceptions
 ----------
 
-.. automodule:: fileorganizer.exceptions
+.. automodule:: OrganiserPro.exceptions
    :members:
    :undoc-members:
    :show-inheritance:
@@ -52,7 +52,7 @@ Exceptions
 Utilities
 ---------
 
-.. automodule:: fileorganizer.utils
+.. automodule:: OrganiserPro.utils
    :members:
    :undoc-members:
    :show-inheritance:

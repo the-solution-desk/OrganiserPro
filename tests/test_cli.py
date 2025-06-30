@@ -1,4 +1,4 @@
-"""Tests for the fileorganizer.cli module."""
+"""Tests for the OrganiserPro.cli module."""
 import os
 import sys
 from pathlib import Path
@@ -11,9 +11,9 @@ import pytest
 # Add the project root to the Python path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from fileorganizer.cli import cli, dedupe
-from fileorganizer.dedupe import find_duplicates_cli as real_find_duplicates_cli
-from fileorganizer.dedupe import find_duplicates_cli
+from OrganiserPro.cli import cli, dedupe
+from OrganiserPro.dedupe import find_duplicates_cli as real_find_duplicates_cli
+from OrganiserPro.dedupe import find_duplicates_cli
 
 
 @pytest.fixture
@@ -33,7 +33,7 @@ def test_cli_help(runner):
 
 def test_cli_version(runner):
     """Test the --version flag."""
-    from fileorganizer import __version__
+    from OrganiserPro import __version__
     result = runner.invoke(cli, ["--version"])
     assert result.exit_code == 0
     assert f"cli, version {__version__}" in result.output or f"cli v{__version__}" in result.output
@@ -47,7 +47,7 @@ def test_cli_no_args_shows_help(runner):
     assert "sort     Sort files by type, date, or size" in result.output
 
 
-@patch("fileorganizer.cli.sort_by_type")
+@patch("OrganiserPro.cli.sort_by_type")
 def test_cli_sort_type(mock_sort, runner, temp_dir):
     """Test the sort --type command."""
     # Create a test file
@@ -60,7 +60,7 @@ def test_cli_sort_type(mock_sort, runner, temp_dir):
     assert str(Path(temp_dir).resolve()) in str(mock_sort.call_args[0][0])
 
 
-@patch("fileorganizer.cli.sort_by_date")
+@patch("OrganiserPro.cli.sort_by_date")
 def test_cli_sort_date(mock_sort, runner, temp_dir):
     """Test the sort --date command."""
     result = runner.invoke(cli, ["sort", str(temp_dir), "--by", "date"])
@@ -68,7 +68,7 @@ def test_cli_sort_date(mock_sort, runner, temp_dir):
     mock_sort.assert_called_once_with(str(temp_dir), "%Y-%m")
 
 
-@patch("fileorganizer.cli.sort_by_date")
+@patch("OrganiserPro.cli.sort_by_date")
 def test_cli_sort_date_with_format(mock_sort, runner, temp_dir):
     """Test the sort --date command with a custom format."""
     result = runner.invoke(cli, ["sort", str(temp_dir), "--by", "date", "--date-format", "%Y/%m"])
@@ -79,7 +79,7 @@ def test_cli_sort_date_with_format(mock_sort, runner, temp_dir):
     assert mock_sort.call_args[0][1] == "%Y/%m"  # date_format is the second positional argument
 
 
-@patch("fileorganizer.cli.sort_by_type")
+@patch("OrganiserPro.cli.sort_by_type")
 def test_cli_sort_no_args_uses_default(mock_sort, runner, temp_dir):
     """Test that sort with no --by option uses the default (type)."""
     result = runner.invoke(cli, ["sort", str(temp_dir)])
@@ -88,7 +88,7 @@ def test_cli_sort_no_args_uses_default(mock_sort, runner, temp_dir):
     assert str(Path(temp_dir).resolve()) in str(mock_sort.call_args[0][0])
 
 
-@patch("fileorganizer.cli.find_duplicates_cli")
+@patch("OrganiserPro.cli.find_duplicates_cli")
 def test_cli_dedupe_dry_run(mock_find, runner, temp_dir):
     """Test the dedupe command with dry run."""
     # Mock the find_duplicates_cli function to return some test data
@@ -110,7 +110,7 @@ def test_cli_dedupe_dry_run(mock_find, runner, temp_dir):
     )
 
 
-@patch("fileorganizer.cli.find_duplicates_cli")
+@patch("OrganiserPro.cli.find_duplicates_cli")
 def test_cli_dedupe_recursive(mock_find, runner, temp_dir):
     """Test the dedupe command with recursive search."""
     mock_find.return_value = {}
@@ -125,7 +125,7 @@ def test_cli_dedupe_recursive(mock_find, runner, temp_dir):
     )
 
 
-@patch("fileorganizer.cli.find_duplicates_cli")
+@patch("OrganiserPro.cli.find_duplicates_cli")
 def test_cli_dedupe_delete(mock_find, runner, temp_dir):
     """Test the dedupe command with delete option."""
     mock_find.return_value = {}
@@ -140,7 +140,7 @@ def test_cli_dedupe_delete(mock_find, runner, temp_dir):
     )
 
 
-@patch("fileorganizer.cli.find_duplicates_cli")
+@patch("OrganiserPro.cli.find_duplicates_cli")
 def test_cli_dedupe_move_to(mock_find, runner, temp_dir):
     """Test the dedupe command with move-to option."""
     mock_find.return_value = {}

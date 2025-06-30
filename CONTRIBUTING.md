@@ -36,14 +36,14 @@ There are many ways to contribute to FileOrganizer:
 2. **Clone your fork** locally:
 
    ```bash
-   git clone https://github.com/your-username/fileorganizer.git
-   cd fileorganizer
+   git clone https://github.com/your-username/OrganiserPro.git
+   cd OrganiserPro
    ```
 
 3. **Add the upstream remote** to keep your fork in sync:
 
    ```bash
-   git remote add upstream https://github.com/the-solution-desk/fileorganizer.git
+   git remote add upstream https://github.com/the-solution-desk/OrganiserPro.git
    ```
 
 4. **Sync your fork** with the upstream repository:
@@ -176,7 +176,7 @@ We use [pytest](https://docs.pytest.org/) for testing. To run the tests:
 pytest
 
 # Run tests with coverage
-pytest --cov=fileorganizer --cov-report=term-missing
+pytest --cov=OrganiserPro --cov-report=term-missing
 
 # Run a specific test file
 pytest tests/test_something.py -v

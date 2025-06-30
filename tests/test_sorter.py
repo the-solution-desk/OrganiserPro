@@ -1,11 +1,11 @@
-"""Tests for the fileorganizer.sorter module."""
+"""Tests for the OrganiserPro.sorter module."""
 import shutil
 import os
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 import pytest
-from fileorganizer.sorter import sort_by_type, sort_by_date, get_file_extension
+from OrganiserPro.sorter import sort_by_type, sort_by_date, get_file_extension
 
 
 def test_get_file_extension():

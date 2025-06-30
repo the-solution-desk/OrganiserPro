@@ -1,4 +1,4 @@
-"""Pytest configuration and fixtures for FileOrganizer tests."""
+"""Pytest configuration and fixtures for OrganiserPro tests."""
 import os
 import shutil
 import tempfile

@@ -25,8 +25,8 @@ Getting Started
 
    .. code-block:: bash
 
-      git clone https://github.com/your-username/fileorganizer.git
-      cd fileorganizer
+      git clone https://github.com/your-username/OrganiserPro.git
+      cd OrganiserPro
 
 3. **Set up the development environment**:
 
@@ -53,9 +53,9 @@ Getting Started
       pytest
 
       # Check code style
-      black fileorganizer tests
-      isort fileorganizer tests
-      flake8 fileorganizer tests
+      black OrganiserPro tests
+      isort OrganiserPro tests
+      flake8 OrganiserPro tests
 
 6. **Commit your changes** with a clear message:
 
@@ -109,7 +109,7 @@ We use pytest_ for testing. To run the tests:
    pytest
 
    # Run tests with coverage
-   pytest --cov=fileorganizer
+   pytest --cov=OrganiserPro
 
    # Run a specific test file
    pytest tests/test_something.py -v

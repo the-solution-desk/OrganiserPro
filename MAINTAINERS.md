@@ -5,8 +5,8 @@ This document provides information for maintainers of the FileOrganizer project.
 ## Project Structure
 
 ```
-fileorganizer/
-├── fileorganizer/      # Main package source code
+OrganiserPro/
+├── OrganiserPro/      # Main package source code
 ├── tests/              # Test suite
 ├── docs/               # Documentation
 ├── .github/            # GitHub configuration
@@ -41,7 +41,7 @@ We follow [Semantic Versioning](https://semver.org/) (SemVer) for version number
    ```
 
 2. Update version numbers:
-   - Update `fileorganizer/__init__.py`
+   - Update `OrganiserPro/__init__.py`
    - Update `CHANGELOG.md` with release notes
    - Update documentation if needed
 

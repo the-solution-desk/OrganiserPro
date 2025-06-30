@@ -1,4 +1,4 @@
-"""Tests for the fileorganizer.dedupe module."""
+"""Tests for the OrganiserPro.dedupe module."""
 import hashlib
 import os
 import shutil
@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 import pytest
-from fileorganizer.dedupe import get_file_hash, find_duplicates, handle_duplicates
+from OrganiserPro.dedupe import get_file_hash, find_duplicates, handle_duplicates
 
 
 def test_get_file_hash(temp_dir: Path):

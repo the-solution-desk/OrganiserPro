@@ -13,8 +13,8 @@ This guide provides instructions for setting up a development environment for Fi
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/your-username/fileorganizer.git
-   cd fileorganizer
+   git clone https://github.com/your-username/OrganiserPro.git
+   cd OrganiserPro
    ```
 
 3. **Set up a virtual environment** (recommended):
@@ -47,7 +47,7 @@ Run the test suite using pytest:
 pytest
 
 # Run tests with coverage report
-pytest --cov=fileorganizer --cov-report=term-missing
+pytest --cov=OrganiserPro --cov-report=term-missing
 
 # Run a specific test file
 pytest tests/test_module.py
@@ -69,16 +69,16 @@ Run these tools manually with:
 
 ```bash
 # Format code with Black
-black fileorganizer tests
+black OrganiserPro tests
 
 # Sort imports with isort
-isort fileorganizer tests
+isort OrganiserPro tests
 
 # Check code style with flake8
-flake8 fileorganizer tests
+flake8 OrganiserPro tests
 
 # Check types with mypy
-mypy fileorganizer
+mypy OrganiserPro
 ```
 
 ## Building Documentation
@@ -203,6 +203,6 @@ See [MAINTAINERS.md](MAINTAINERS.md) for detailed release instructions.
 
 If you need help with development:
 
-1. Check the [documentation](https://fileorganizer.readthedocs.io/)
-2. Search the [issue tracker](https://github.com/the-solution-desk/fileorganizer/issues)
+1. Check the [documentation](https://OrganiserPro.readthedocs.io/)
+2. Search the [issue tracker](https://github.com/the-solution-desk/OrganiserPro/issues)
 3. Open a new issue if your question hasn't been answered

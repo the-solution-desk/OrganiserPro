@@ -9,8 +9,8 @@ BLACK = black
 ISORT = isort
 MYPY = mypy
 SPHINX_BUILD = sphinx-build
-SOURCES = fileorganizer tests
-PACKAGE = fileorganizer
+SOURCES = OrganiserPro tests
+PACKAGE = OrganiserPro
 
 # Default target
 all: install

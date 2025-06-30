@@ -10,10 +10,10 @@ nox.options.sessions = ["tests", "lint", "typecheck"]
 PYTHON_VERSIONS = ["3.8", "3.9", "3.10", "3.11"]
 
 # Package directory
-PACKAGE = "fileorganizer"
+PACKAGE = "OrganiserPro"
 
 # Files and directories to run linting on
-LINT_PATHS = ["fileorganizer", "tests", "noxfile.py", "setup.py"]
+LINT_PATHS = ["OrganiserPro", "tests", "noxfile.py", "setup.py"]
 
 
 @nox.session(python=PYTHON_VERSIONS)

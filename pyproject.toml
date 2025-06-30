@@ -3,7 +3,7 @@ requires = ["setuptools>=42.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fileorganizer"
+name = "OrganiserPro"
 dynamic = ["version"]
 description = "A powerful file organization tool"
 readme = "README.md"
@@ -50,13 +50,13 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/the-solution-desk/fileorganizer"
-Documentation = "https://fileorganizer.readthedocs.io/"
-Repository = "https://github.com/the-solution-desk/fileorganizer"
-Changelog = "https://github.com/the-solution-desk/fileorganizer/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/the-solution-desk/OrganiserPro"
+Documentation = "https://OrganiserPro.readthedocs.io/"
+Repository = "https://github.com/the-solution-desk/OrganiserPro"
+Changelog = "https://github.com/the-solution-desk/OrganiserPro/blob/main/CHANGELOG.md"
 
 [tool.setuptools.dynamic]
-version = {attr = "fileorganizer.__version__"}
+version = {attr = "OrganiserPro.__version__"}
 
 [tool.black]
 line-length = 88
@@ -84,10 +84,10 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
-addopts = "-v --cov=fileorganizer --cov-report=term-missing"
+addopts = "-v --cov=OrganiserPro --cov-report=term-missing"
 
 [tool.coverage.run]
-source = ["fileorganizer"]
+source = ["OrganiserPro"]
 omit = [
     "*/tests/*",
     "*/__init__.py"

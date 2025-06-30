@@ -17,7 +17,7 @@ Using pip (recommended)
 
 .. code-block:: bash
 
-   pip install fileorganizer
+   pip install OrganiserPro
 
 From source
 ^^^^^^^^^^^
@@ -26,8 +26,8 @@ From source
 
    .. code-block:: bash
 
-      git clone https://github.com/the-solution-desk/fileorganizer.git
-      cd fileorganizer
+      git clone https://github.com/the-solution-desk/OrganiserPro.git
+      cd OrganiserPro
 
 2. Install in development mode:
 
@@ -42,7 +42,7 @@ After installation, verify that the installation was successful by running:
 
 .. code-block:: bash
 
-   fileorganizer --version
+   OrganiserPro --version
 
 This should display the installed version of FileOrganizer.
 

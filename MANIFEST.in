@@ -7,7 +7,7 @@ include SECURITY.md
 include requirements.txt
 recursive-include docs *
 recursive-include tests *
-recursive-include fileorganizer *.py
+recursive-include OrganiserPro *.py
 prune docs/_build
 prune .github
 prune .git

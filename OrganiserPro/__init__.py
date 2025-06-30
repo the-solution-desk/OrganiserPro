@@ -1,11 +1,11 @@
 """
-FileOrganizer - A powerful tool for organizing, deduplicating, and managing files.
+OrganiserPro - A powerful tool for organizing, deduplicating, and managing files.
 
 This package provides a command-line interface for sorting files by type, date, or size,
 and for finding and handling duplicate files.
 """
 
-# Version of the fileorganizer package
+# Version of the OrganiserPro package
 __version__ = "0.1.0"
 
 from .cli import cli

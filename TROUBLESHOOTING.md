@@ -12,9 +12,9 @@ This guide provides solutions to common issues you might encounter while using F
 
 ## Installation Issues
 
-### Error: "Command not found: fileorganizer"
+### Error: "Command not found: OrganiserPro"
 
-**Symptoms**: After installation, the `fileorganizer` command is not recognized.
+**Symptoms**: After installation, the `OrganiserPro` command is not recognized.
 
 **Solution**:
 
@@ -23,7 +23,7 @@ This guide provides solutions to common issues you might encounter while using F
 2. Try reinstalling with:
 
    ```bash
-   pip uninstall fileorganizer
+   pip uninstall OrganiserPro
    pip install -e .
    ```
 
@@ -97,7 +97,7 @@ This guide provides solutions to common issues you might encounter while using F
 
 If you encounter an issue not covered in this guide, please:
 
-1. Check the [GitHub Issues](https://github.com/the-solution-desk/fileorganizer/issues) for similar problems.
+1. Check the [GitHub Issues](https://github.com/the-solution-desk/OrganiserPro/issues) for similar problems.
 2. Open a new issue with details about your problem, including:
    - The exact command you ran
    - The full error message

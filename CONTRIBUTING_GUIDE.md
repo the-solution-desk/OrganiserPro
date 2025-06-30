@@ -25,8 +25,8 @@ This project adheres to the [Contributor Covenant Code of Conduct](CODE_OF_CONDU
 1. **Fork the repository** on GitHub.
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/your-username/fileorganizer.git
-   cd fileorganizer
+   git clone https://github.com/your-username/OrganiserPro.git
+   cd OrganiserPro
    ```
 3. **Set up a virtual environment** (recommended):
    ```bash
@@ -98,7 +98,7 @@ We use `pytest` for testing. To run the tests:
 pytest
 
 # Run tests with coverage report
-pytest --cov=fileorganizer --cov-report=term-missing
+pytest --cov=OrganiserPro --cov-report=term-missing
 
 # Run a specific test file
 pytest tests/test_module.py
