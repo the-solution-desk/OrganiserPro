@@ -2,8 +2,10 @@
 
 import os
 from pathlib import Path
+
 import pytest
-from OrganiserPro.sorter import sort_by_type, sort_by_date, get_file_extension
+
+from OrganiserPro.sorter import get_file_extension, sort_by_date, sort_by_type
 
 
 def test_get_file_extension() -> None:
@@ -48,10 +50,10 @@ def test_sort_by_type_handles_duplicate_filenames(temp_dir: Path) -> None:
     # Create test files with same name but different content
     file1 = temp_dir / "file1.txt"
     file1.write_text("First file")
-    
+
     file2 = temp_dir / "file1_1.txt"
     file2.write_text("Second file with similar name")
-    
+
     # Set different modification times (1 day apart)
     timestamp1 = 1642204800  # 2022-01-15
     timestamp2 = 1642291200  # 2022-01-16
@@ -64,16 +66,20 @@ def test_sort_by_type_handles_duplicate_filenames(temp_dir: Path) -> None:
     # Check if files were moved to date-based directories
     date_dirs = list(temp_dir.glob("*"))
     # We expect 2 date directories since we set different modification times
-    assert len(date_dirs) == 2, f"Expected 2 date directories, found {len(date_dirs)}: {date_dirs}"
+    assert (
+        len(date_dirs) == 2
+    ), f"Expected 2 date directories, found {len(date_dirs)}: {date_dirs}"
 
     # Check that files exist in their respective date directories
     files_found = 0
     for date_dir in date_dirs:
         files = list(date_dir.glob("*"))
         files_found += len(files)
-    
+
     # We should have both files in date directories
-    assert files_found == 2, f"Expected 2 files total in date directories, found {files_found}"
+    assert (
+        files_found == 2
+    ), f"Expected 2 files total in date directories, found {files_found}"
 
     # Verify the original files no longer exist in the root
     assert not (temp_dir / "file1.txt").exists()

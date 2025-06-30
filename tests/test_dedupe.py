@@ -4,14 +4,16 @@ import hashlib
 import os
 import re
 from pathlib import Path
+
 import pytest
-from OrganiserPro.dedupe import find_duplicates, handle_duplicates, get_file_hash
+
+from OrganiserPro.dedupe import find_duplicates, get_file_hash, handle_duplicates
 
 
 def strip_ansi(text: str) -> str:
     """Remove ANSI escape sequences from a string."""
-    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
-    return ansi_escape.sub('', text)
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+    return ansi_escape.sub("", text)
 
 
 def test_get_file_hash(temp_dir: Path) -> None:
@@ -84,7 +86,9 @@ def test_find_duplicates_recursive(temp_dir: Path) -> None:
     assert find_duplicates(str(temp_dir), recursive=False) == {}
 
 
-def test_handle_duplicates_dry_run(temp_dir: Path, capsys: pytest.CaptureFixture) -> None:
+def test_handle_duplicates_dry_run(
+    temp_dir: Path, capsys: pytest.CaptureFixture
+) -> None:
     """Test handle_duplicates in dry run mode."""
     # Create test files with duplicate content
     content = "Duplicate content"
@@ -102,13 +106,16 @@ def test_handle_duplicates_dry_run(temp_dir: Path, capsys: pytest.CaptureFixture
     # Strip ANSI color codes before checking the output
     clean_output = strip_ansi(output)
     assert "Found 2 duplicate files in 1 groups" in clean_output
-    assert "Note: Use --delete to remove duplicates or --move-to to move them" in clean_output
+    note_msg = "Note: Use --delete to remove duplicates or --move-to to move them"
+    assert note_msg in clean_output
 
     # Verify no files were deleted or moved
     assert all(file.exists() for file in files)
 
 
-def test_handle_duplicates_delete(temp_dir: Path, capsys: pytest.CaptureFixture) -> None:
+def test_handle_duplicates_delete(
+    temp_dir: Path, capsys: pytest.CaptureFixture
+) -> None:
     """Test handling duplicates with delete option."""
     # Create test files with same content
     file1 = temp_dir / "file1.txt"

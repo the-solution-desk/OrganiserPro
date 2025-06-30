@@ -1,7 +1,8 @@
 """Nox configuration for automated testing and linting."""
 
-import nox
 from pathlib import Path
+
+import nox
 
 # Default sessions to run when no session is specified
 nox.options.sessions = ["tests", "lint", "typecheck"]

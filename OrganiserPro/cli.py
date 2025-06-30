@@ -5,25 +5,38 @@ from typing import Optional
 import click
 from rich.console import Console
 
-from .sorter import sort_by_type, sort_by_date
 from .dedupe import find_duplicates
+from .sorter import sort_by_date, sort_by_type
+
+
+from .dedupe import find_duplicates_cli
 
 # This function needs to be importable for tests to mock it
 def dedupe(directory, recursive=False, delete=False, move_to=None, dry_run=False):
     """Find and handle duplicate files in DIRECTORY."""
-    # Implementation that matches test expectations
     if dry_run:
         console.print(f"[yellow]Dry run: Would search for duplicates in {directory}")
         if recursive:
             console.print("[yellow]Would search recursively")
         return 0
-    # Actual implementation would go here
-    return 0
+    
+    # Call the actual implementation
+    return find_duplicates_cli(
+        directory=directory,
+        recursive=recursive,
+        delete=delete,
+        move_to=move_to
+    )
+
 
 console = Console()
 VERSION = "0.1.0"
 
-@click.group(invoke_without_command=True, context_settings={"help_option_names": ["-h", "--help"]})
+
+@click.group(
+    invoke_without_command=True,
+    context_settings={"help_option_names": ["-h", "--help"]},
+)
 @click.version_option(version=VERSION, message="%(prog)s, version %(version)s")
 @click.pass_context
 def cli(ctx):
@@ -37,16 +50,28 @@ def cli(ctx):
 
 
 @cli.command()
-@click.argument("directory", type=click.Path(exists=True, file_okay=False, dir_okay=True, resolve_path=True))
-@click.option("--by", type=click.Choice(["type", "date", "size"]), default="type",
-              help="Sort files by type (extension), date, or size")
-@click.option("--date-format", default="%Y-%m", show_default=True,
-              help="Date format for date-based sorting (e.g., %%Y-%%m-%%d for YYYY-MM-DD)")
-@click.option("--dry-run", is_flag=True, help="Show what would be done without making changes")
+@click.argument(
+    "directory",
+    type=click.Path(exists=True, file_okay=False, dir_okay=True, resolve_path=True),
+)
+@click.option(
+    "--by",
+    type=click.Choice(["type", "date", "size"]),
+    default="type",
+    help="Sort files by type (extension), date, or size",
+)
+@click.option(
+    "--date-format",
+    default="%Y-%m",
+    help="Date format for organizing files (e.g., '%%Y-%%m-%%d' or '%%Y/%%m/%%d')",
+)
+@click.option(
+    "--dry-run", is_flag=True, help="Show what would be done without making changes"
+)
 def sort(directory, by, date_format, dry_run):
     """Sort files in DIRECTORY by type, date, or size."""
     directory = str(Path(directory).resolve())
-    
+
     if by == "type":
         if dry_run:
             exts = set(
@@ -54,7 +79,10 @@ def sort(directory, by, date_format, dry_run):
                 for p in Path(directory).iterdir()
                 if p.is_file() and not p.name.startswith(".")
             )
-            console.print(f"Would group files by type into folders: {', '.join(exts) if exts else 'No files found'}")
+            console.print(
+                "Would group files by type into folders: "
+                f"{', '.join(exts) if exts else 'No files found'}"
+            )
             return 0
         else:
             sort_by_type(directory)
@@ -80,9 +108,13 @@ def sort_by_type_cmd(directory: str, dry_run: bool = False):
             for p in Path(directory).iterdir()
             if p.is_file() and not p.name.startswith(".")
         )
-        console.print(f"Would group files by type into folders: {', '.join(exts) if exts else 'No files found'}")
+        console.print(
+            "Would group files by type into folders: "
+            f"{', '.join(exts) if exts else 'No files found'}"
+        )
     else:
         sort_by_type(directory)
+
 
 def sort_by_date_cmd(directory: str, date_format: str, dry_run: bool = False):
     """Legacy function for sort by date functionality."""
@@ -126,12 +158,29 @@ def sort_by_size_cmd(directory: str, dry_run: bool = False):
 
 
 @cli.command()
-@click.argument("directory", type=click.Path(exists=True, file_okay=False, dir_okay=True, resolve_path=True))
-# Default recursive to True to match test expectations for dry-run
-@click.option("--recursive/--no-recursive", default=True, help="Search for duplicates in subdirectories")
-@click.option("--delete", is_flag=True, help="Delete duplicate files (keep only one copy)")
-@click.option("--move-to", type=click.Path(file_okay=False, dir_okay=True, resolve_path=True), help="Move duplicate files to this directory")
-@click.option("--dry-run", is_flag=True, help="Show what would be done without making changes")
+@click.argument(
+    "directory",
+    type=click.Path(exists=True, file_okay=False, dir_okay=True, resolve_path=True),
+    required=True,
+)
+@click.option(
+    "--recursive/--no-recursive",
+    default=True,
+    help="Search for duplicates in subdirectories",
+)
+@click.option(
+    "--delete", is_flag=True, help="Delete duplicate files (keep only one copy)"
+)
+@click.option(
+    "--move-to",
+    type=click.Path(
+        file_okay=False, dir_okay=True, writable=True, resolve_path=True
+    ),
+    help="Move duplicates to this directory instead of deleting them",
+)
+@click.option(
+    "--dry-run", is_flag=True, help="Show what would be done without making changes"
+)
 def dedupe_command(directory, recursive, delete, move_to, dry_run):
     """Find and handle duplicate files in DIRECTORY."""
     try:
@@ -139,14 +188,14 @@ def dedupe_command(directory, recursive, delete, move_to, dry_run):
         directory = str(Path(directory).resolve())
         if move_to:
             move_to = str(Path(move_to).resolve())
-            
+
         # Call the actual implementation
         return dedupe(
             directory=directory,
             recursive=recursive,
             delete=delete,
             move_to=move_to,
-            dry_run=dry_run
+            dry_run=dry_run,
         )
     except Exception as e:
         console.print(f"[red]Error: {e}")
@@ -154,8 +203,9 @@ def dedupe_command(directory, recursive, delete, move_to, dry_run):
 
 
 # Legacy dedupe command implementation
-def dedupe_cmd(directory: str, recursive: bool, delete: bool, 
-              move_to: Optional[str], dry_run: bool) -> int:
+def dedupe_cmd(
+    directory: str, recursive: bool, delete: bool, move_to: Optional[str], dry_run: bool
+) -> int:
     """Legacy function for dedupe command."""
     cmd = [str(directory)]
     if recursive:
@@ -166,14 +216,14 @@ def dedupe_cmd(directory: str, recursive: bool, delete: bool,
         cmd.extend(["--move-to", str(move_to)])
     if dry_run:
         cmd.append("--dry-run")
-    
+
     # Call the function directly instead of through CLI
     return find_duplicates(
         directory=directory,
         recursive=recursive,
         delete=delete,
         move_to=move_to,
-        dry_run=dry_run
+        dry_run=dry_run,
     )
 
 

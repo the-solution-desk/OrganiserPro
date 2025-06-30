@@ -1,13 +1,12 @@
 from collections import defaultdict
 from hashlib import sha256
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional
 import click
-from rich.table import Table
-
 from rich.console import Console
 from rich.progress import Progress
 from rich.prompt import Confirm
+from rich.table import Table
 
 console = Console()
 
@@ -64,7 +63,7 @@ def find_duplicates(directory: str, recursive: bool = False) -> Dict[str, List[P
             all_files = list(dir_path.rglob("*"))
         else:
             all_files = list(dir_path.glob("*"))
-            
+
         progress.update(task, total=len(all_files))
 
         for file_path in all_files:
@@ -104,17 +103,22 @@ def handle_duplicates(
         delete: If True, delete all but the first file in each duplicate set
         move_to: If provided, move duplicates to this directory instead of deleting
     """
-    # Count total files in all duplicate groups (excluding the first file in each group)
+    # Count total files in all duplicate groups
     total_duplicate_groups = sum(1 for files in duplicates.values() if len(files) > 1)
-    total_duplicate_files = sum(len(files) - 1 for files in duplicates.values() if len(files) > 1)
-    
+    total_duplicate_files = sum(
+        len(files) - 1 for files in duplicates.values() if len(files) > 1
+    )
+
     if total_duplicate_groups == 0:
         console.print("[green]No duplicate files found![/green]")
         return
 
     # Prepare the summary message
     file_word = "file" if total_duplicate_files == 1 else "files"
-    console.print(f"\nFound {total_duplicate_files} duplicate {file_word} in {total_duplicate_groups} groups:")
+    console.print(
+        f"\nFound {total_duplicate_files} duplicate {file_word} "
+        f"in {total_duplicate_groups} groups:"
+    )
 
     # Create destination directory if moving files
     if move_to:
@@ -163,7 +167,10 @@ def handle_duplicates(
 
 
 def find_duplicates_cli(
-    directory: str, recursive: bool = False, delete: bool = False, move_to: Optional[str] = None
+    directory: str,
+    recursive: bool = False,
+    delete: bool = False,
+    move_to: Optional[str] = None,
 ) -> None:
     """CLI interface for finding and handling duplicate files.
 

@@ -1,17 +1,13 @@
-import os
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
 
 from rich.console import Console
-from rich.progress import Progress
-
 console = Console()
 
 
 def get_file_extension(file_path: Path) -> str:
-    """Get the lowercase file extension without the dot.
+    """Get the file extension without the dot.
 
     Args:
         file_path: Path to the file
@@ -46,8 +42,7 @@ def sort_by_type(directory: str) -> None:
         return
 
     # Create a progress bar
-    with Progress() as progress:
-        task = progress.add_task("Sorting files...", total=len(all_files))
+    with console.status("Sorting files..."):
         files_processed = 0
         extensions_created = set()
 
@@ -85,8 +80,6 @@ def sort_by_type(directory: str) -> None:
 
             except Exception as e:
                 console.print(f"[red]Error processing {file_path.name}: {e}")
-            finally:
-                progress.update(task, advance=1)
 
     console.print(
         f"✅ Sorted {files_processed} files into {len(extensions_created)} directories"
@@ -95,11 +88,11 @@ def sort_by_type(directory: str) -> None:
 
 def sort_by_date(directory: str, date_format: str = "%Y-%m") -> None:
     """
-    Sort files in the given directory into subdirectories by modification date.
+    Sort files into subdirectories based on file type, size, or date.
 
     Args:
-        directory: Path to the directory containing files to sort
-        date_format: Format string for the date-based directory names (e.g., "%Y-%m-%d")
+        directory: Directory to sort
+        date_format: Format string for date-based sorting
     """
     source_dir = Path(directory).expanduser().resolve()
 
@@ -122,21 +115,25 @@ def sort_by_date(directory: str, date_format: str = "%Y-%m") -> None:
     date_dirs_created = set()
 
     # Process files with progress
-    with Progress() as progress:
-        task = progress.add_task("Sorting files...", total=len(all_files))
-
+    with console.status("Sorting files..."):
         for file_path in all_files:
             if file_path.is_file() and not file_path.name.startswith("."):
                 try:
-                    mod_time = file_path.stat().st_mtime
-                    date_str = datetime.fromtimestamp(mod_time).strftime(date_format)
-                    target_dir = source_dir / date_str
-                    
+                    # Get the file's last modified time and format it
+                    mtime = file_path.stat().st_mtime
+                    dt = datetime.fromtimestamp(mtime)
+                    date_str = dt.strftime(
+                        date_format.replace("YYYY", "%Y").replace(
+                            "MM", "%m"
+                        ).replace("DD", "%d")
+                    )
+
                     # Create target directory if it doesn't exist
+                    target_dir = source_dir / date_str
                     if date_str not in date_dirs_created:
                         target_dir.mkdir(exist_ok=True)
                         date_dirs_created.add(date_str)
-                        
+
                     target_path = target_dir / file_path.name
 
                     # Handle filename conflicts
@@ -155,8 +152,7 @@ def sort_by_date(directory: str, date_format: str = "%Y-%m") -> None:
                     console.print(msg)
                     continue
 
-            progress.update(task, advance=1)
-
     console.print(
-        f"✅ Sorted {files_processed} files into {len(date_dirs_created)} date-based directories"
+        f"✅ Sorted {files_processed} files into "
+        f"{len(date_dirs_created)} date-based directories"
     )

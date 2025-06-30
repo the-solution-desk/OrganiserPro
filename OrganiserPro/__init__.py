@@ -9,8 +9,8 @@ and for finding and handling duplicate files.
 __version__ = "0.1.0"
 
 from .cli import cli
-from .sorter import sort_by_type, sort_by_date
 from .dedupe import find_duplicates, find_duplicates_cli, handle_duplicates
+from .sorter import sort_by_date, sort_by_type
 
 __all__ = [
     "cli",
