@@ -1,7 +1,7 @@
 # 🗂️ OrganiserPro
 
 [![PyPI version](https://img.shields.io/pypi/v/organiserpro.svg)](https://pypi.org/project/organiserpro/)
-[![Python versions](https://img.shields.io/pypi/pyversions/organiserpro.svg)](https://pypi.org/project/organiserpro/)
+[![Python 3.8-3.13](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10%20|%203.11%20|%203.12%20|%203.13-blue)](https://pypi.org/project/organiserpro/)
 [![Tests](https://github.com/the-solution-desk/OrganiserPro/actions/workflows/ci.yml/badge.svg)](https://github.com/the-solution-desk/OrganiserPro/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/the-solution-desk/OrganiserPro/branch/main/graph/badge.svg)](https://codecov.io/gh/the-solution-desk/OrganiserPro)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

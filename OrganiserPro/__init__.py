@@ -13,10 +13,10 @@ from .sorter import sort_by_type, sort_by_date
 from .dedupe import find_duplicates, find_duplicates_cli, handle_duplicates
 
 __all__ = [
-    'cli',
-    'sort_by_type',
-    'sort_by_date',
-    'find_duplicates',
-    'find_duplicates_cli',
-    'handle_duplicates',
+    "cli",
+    "sort_by_type",
+    "sort_by_date",
+    "find_duplicates",
+    "find_duplicates_cli",
+    "handle_duplicates",
 ]

@@ -1,4 +1,5 @@
 """Pytest configuration and fixtures for OrganiserPro tests."""
+
 import os
 import shutil
 import tempfile
@@ -26,7 +27,7 @@ def test_data_dir() -> Path:
 
 def create_test_files(directory: Path, file_list: list[tuple[str, str]]) -> None:
     """Create test files in the specified directory.
-    
+
     Args:
         directory: Directory to create files in
         file_list: List of tuples (filename, content)
@@ -34,6 +35,6 @@ def create_test_files(directory: Path, file_list: list[tuple[str, str]]) -> None
     for filename, content in file_list:
         file_path = directory / filename
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        file_path.write_text(content, encoding='utf-8')
+        file_path.write_text(content, encoding="utf-8")
         # Set modification time to a fixed value for consistent testing
         os.utime(file_path, (1617235200, 1617235200))  # 2021-04-01 00:00:00
