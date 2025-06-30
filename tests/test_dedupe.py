@@ -7,7 +7,7 @@ import pytest
 from OrganiserPro.dedupe import find_duplicates, handle_duplicates, get_file_hash
 
 
-def test_get_file_hash(temp_dir: Path):
+def test_get_file_hash(temp_dir: Path) -> None:
     """Test the get_file_hash function with known content."""
     # Create a test file with known content
     test_file = temp_dir / "test.txt"
@@ -23,17 +23,17 @@ def test_get_file_hash(temp_dir: Path):
     assert get_file_hash(test_file) == expected_hash
 
 
-def test_get_file_hash_nonexistent_file():
+def test_get_file_hash_nonexistent_file() -> None:
     """Test that get_file_hash handles non-existent files gracefully."""
     assert get_file_hash(Path("/nonexistent/file/path")) == ""
 
 
-def test_find_duplicates_empty_directory(temp_dir: Path):
+def test_find_duplicates_empty_directory(temp_dir: Path) -> None:
     """Test find_duplicates with an empty directory."""
     assert find_duplicates(str(temp_dir)) == {}
 
 
-def test_find_duplicates_no_duplicates(temp_dir: Path):
+def test_find_duplicates_no_duplicates(temp_dir: Path) -> None:
     """Test find_duplicates with files that have unique content."""
     # Create test files with different content
     (temp_dir / "file1.txt").write_text("Content 1")
@@ -42,7 +42,7 @@ def test_find_duplicates_no_duplicates(temp_dir: Path):
     assert find_duplicates(str(temp_dir)) == {}
 
 
-def test_find_duplicates_with_duplicates(temp_dir: Path):
+def test_find_duplicates_with_duplicates(temp_dir: Path) -> None:
     """Test find_duplicates with duplicate files."""
     # Create test files with duplicate content
     content = "This is a duplicate file"
@@ -60,7 +60,7 @@ def test_find_duplicates_with_duplicates(temp_dir: Path):
     assert len(list(duplicates.values())[0]) == 2
 
 
-def test_find_duplicates_recursive(temp_dir: Path):
+def test_find_duplicates_recursive(temp_dir: Path) -> None:
     """Test find_duplicates with recursive directory search."""
     # Create test files in subdirectories
     content = "This is a duplicate file"
@@ -77,7 +77,7 @@ def test_find_duplicates_recursive(temp_dir: Path):
     assert find_duplicates(str(temp_dir), recursive=False) == {}
 
 
-def test_handle_duplicates_dry_run(temp_dir: Path, capsys):
+def test_handle_duplicates_dry_run(temp_dir: Path, capsys: pytest.CaptureFixture) -> None:
     """Test handle_duplicates in dry run mode."""
     # Create test files with duplicate content
     content = "Duplicate content"
@@ -99,7 +99,7 @@ def test_handle_duplicates_dry_run(temp_dir: Path, capsys):
     assert all(file.exists() for file in files)
 
 
-def test_handle_duplicates_delete(temp_dir: Path, capsys):
+def test_handle_duplicates_delete(temp_dir: Path, capsys: pytest.CaptureFixture) -> None:
     """Test handling duplicates with delete option."""
     # Create test files with same content
     file1 = temp_dir / "file1.txt"
@@ -127,7 +127,7 @@ def test_handle_duplicates_delete(temp_dir: Path, capsys):
     assert not file2.exists()  # Newer file should be deleted
 
 
-def test_handle_duplicates_move_to(temp_dir: Path):
+def test_handle_duplicates_move_to(temp_dir: Path) -> None:
     """Test handle_duplicates with move_to directory."""
     # Create test files with duplicate content
     content = "Duplicate content"

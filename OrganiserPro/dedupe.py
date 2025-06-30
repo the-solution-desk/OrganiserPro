@@ -1,7 +1,9 @@
 from collections import defaultdict
 from hashlib import sha256
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
+import click
+from rich.table import Table
 
 from rich.console import Console
 from rich.progress import Progress
@@ -160,16 +162,29 @@ def handle_duplicates(
         console.print(msg)
 
 
-def find_duplicates_cli(directory: str) -> None:
-    """CLI interface for finding and handling duplicate files."""
+def find_duplicates_cli(
+    directory: str, recursive: bool = False, delete: bool = False, move_to: Optional[str] = None
+) -> None:
+    """CLI interface for finding and handling duplicate files.
+
+    Args:
+        directory: Directory to search for duplicate files
+        recursive: If True, search subdirectories recursively
+        delete: If True, delete duplicate files (keeping the oldest)
+        move_to: If provided, move duplicate files to this directory instead of deleting
+    """
     console = Console()
 
-    if not Confirm.ask(
+    if delete and move_to:
+        console.print("[red]Error: Cannot specify both --delete and --move-to")
+        return
+
+    if not (delete or move_to) and not Confirm.ask(
         "\n[red]WARNING: This will delete duplicate files. Continue?", default=False
     ):
         return
 
-    duplicates = find_duplicates(directory)
+    duplicates = find_duplicates(directory, recursive=recursive)
 
     if not duplicates:
         console.print("\n[green]No duplicate files found![/]")
@@ -185,8 +200,13 @@ def find_duplicates_cli(directory: str) -> None:
 
     console.print(table)
 
-    if Confirm.ask("\nDelete all but the first of each duplicate?", default=False):
+    if delete:
         handle_duplicates(duplicates, delete=True)
-    elif Confirm.ask("Move duplicates to a different directory?", default=False):
-        move_to = click.prompt("Enter destination directory")
+    elif move_to:
         handle_duplicates(duplicates, move_to=move_to)
+    elif not (delete or move_to):  # Interactive mode if no flags were provided
+        if Confirm.ask("\nDelete all but the first of each duplicate?", default=False):
+            handle_duplicates(duplicates, delete=True)
+        elif Confirm.ask("Move duplicates to a different directory?", default=False):
+            move_to_dir = click.prompt("Enter destination directory")
+            handle_duplicates(duplicates, move_to=move_to_dir)

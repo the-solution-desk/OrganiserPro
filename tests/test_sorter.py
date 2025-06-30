@@ -6,7 +6,7 @@ import pytest
 from OrganiserPro.sorter import sort_by_type, sort_by_date, get_file_extension
 
 
-def test_get_file_extension():
+def test_get_file_extension() -> None:
     """Test the get_file_extension helper function."""
     assert get_file_extension(Path("test.txt")) == "txt"
     assert get_file_extension(Path("archive.tar.gz")) == "gz"
@@ -15,7 +15,7 @@ def test_get_file_extension():
     assert get_file_extension(Path("folder/.hidden")) == ""
 
 
-def test_sort_by_type_creates_directories(temp_dir: Path):
+def test_sort_by_type_creates_directories(temp_dir: Path) -> None:
     """Test that sort_by_type creates directories for each file extension."""
     # Create test files
     test_files = [
@@ -43,7 +43,7 @@ def test_sort_by_type_creates_directories(temp_dir: Path):
     assert (temp_dir / "pdf" / "document.pdf").exists()
 
 
-def test_sort_by_type_handles_duplicate_filenames(temp_dir: Path):
+def test_sort_by_type_handles_duplicate_filenames(temp_dir: Path) -> None:
     """Test that sort_by_type handles duplicate filenames correctly."""
     # Create test files with same name but different content
     file1 = temp_dir / "file1.txt"
@@ -80,7 +80,7 @@ def test_sort_by_type_handles_duplicate_filenames(temp_dir: Path):
     assert not (temp_dir / "file1_1.txt").exists()
 
 
-def test_sort_by_date_creates_directories(temp_dir: Path):
+def test_sort_by_date_creates_directories(temp_dir: Path) -> None:
     """Test that sort_by_date creates directories based on file modification dates."""
     # Create test files with different modification times
     test_files = [
@@ -127,7 +127,7 @@ def test_sort_by_date_creates_directories(temp_dir: Path):
         ), f"File {file_path} still exists in source directory"
 
 
-def test_sort_by_date_with_custom_format(temp_dir: Path):
+def test_sort_by_date_with_custom_format(temp_dir: Path) -> None:
     """Test that sort_by_date respects custom date formats."""
     # Create test files with different modification dates
     for i in range(3):
@@ -154,7 +154,7 @@ def test_sort_by_date_with_custom_format(temp_dir: Path):
     assert not file_path.exists(), f"File {file_path} still exists in source directory"
 
 
-def test_sort_nonexistent_directory():
+def test_sort_nonexistent_directory() -> None:
     """Test that sort functions handle non-existent directories gracefully."""
     # Test with a non-existent directory (should not raise an exception)
     try:
