@@ -1,154 +1,124 @@
-# FileOrganizer
+# OrganiserPro
 
-[![PyPI](https://img.shields.io/pypi/v/fileorganizer)](https://pypi.org/project/fileorganizer/)
-[![Python Version](https://img.shields.io/pypi/pyversions/fileorganizer)](https://www.python.org/downloads/)
-[![Tests](https://github.com/the-solution-desk/fileorganizer/actions/workflows/ci.yml/badge.svg)](https://github.com/the-solution-desk/fileorganizer/actions/workflows/ci.yml)
-[![Codecov](https://codecov.io/gh/the-solution-desk/fileorganizer/branch/main/graph/badge.svg)](https://codecov.io/gh/the-solution-desk/fileorganizer)
+[![PyPI](https://img.shields.io/pypi/v/organiserpro)](https://pypi.org/project/organiserpro/)
+[![Python Version](https://img.shields.io/pypi/pyversions/organiserpro)](https://www.python.org/downloads/)
+[![Tests](https://github.com/the-solution-desk/organiserpro/actions/workflows/ci.yml/badge.svg)](https://github.com/the-solution-desk/organiserpro/actions/workflows/ci.yml)
+[![Codecov](https://codecov.io/gh/the-solution-desk/organiserpro/branch/main/graph/badge.svg)](https://codecov.io/gh/the-solution-desk/organiserpro)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Documentation Status](https://readthedocs.org/projects/fileorganizer/badge/?version=latest)](https://fileorganizer.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/organiserpro/badge/?version=latest)](https://organiserpro.readthedocs.io/en/latest/?badge=latest)
 
-A powerful, cross-platform command-line tool for organizing, deduplicating, and managing files with ease. FileOrganizer helps you keep your files tidy by sorting them into logical directories, finding and removing duplicates, and more.
+> **OrganiserPro** is a powerful, cross-platform command-line tool for sorting, deduplicating, and managing your files with ease. Keep your files tidy—sort, organize, and eliminate clutter in seconds.
+
+---
 
 ## ✨ Features
 
 - **Smart File Sorting**
   - Sort files by type (extension)
-  - Organize by modification/creation date
+  - Organize by modification or creation date
   - Customizable date formats
-  - Dry-run mode to preview changes
+  - *Dry-run* mode to preview changes
 
 - **Duplicate Detection**
   - Find duplicate files by content
-  - Remove duplicates automatically
-  - Move duplicates to a separate directory
+  - Remove or move duplicates automatically
   - Recursive directory scanning
 
 - **User-Friendly**
-  - Beautiful terminal output with `rich`
+  - Beautiful terminal output powered by `rich`
   - Progress bars for long operations
-  - Clear error messages
-  - Comprehensive help system
+  - Clear error messages and comprehensive help system
+
+---
 
 ## 🚀 Installation
 
-### Prerequisites
+**Prerequisites:**  
+- Python 3.7 or higher  
+- [pip](https://pip.pypa.io/en/stable/) (Python package manager)
 
-- Python 3.7 or higher
-- pip (Python package manager)
-
-### Using pip (Recommended)
-
-```bash
-pip install fileorganizer
-```
-
-### Development Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/the-solution-desk/fileorganizer.git
-   cd fileorganizer
-   ```
-
-2. Set up a virtual environment (recommended):
-
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
-
-3. Install the package in development mode with all dependencies:
-
-   ```bash
-   pip install -e ".[dev]"
-   ```
-
-### Verifying Installation
+**The recommended way to install OrganiserPro is in a virtual environment.**
 
 ```bash
-fileorganizer --version
+# Create and activate a virtual environment (recommended)
+python3 -m venv organiserpro-env
+source organiserpro-env/bin/activate  # On Windows use: organiserpro-env\Scripts\activate
+
+# Install OrganiserPro from PyPI
+pip install organiserpro
 ```
 
-## 🛠️ Usage
+> **Note for Ubuntu/Debian/Python 3.12+ users:**  
+> If you try to install system-wide with pip, you may see an `externally-managed-environment` error due to recent changes in Python packaging (PEP 668).  
+> Using a virtual environment avoids this problem and keeps your Python setup clean.
 
-### Sort files by type (extension)
+For more help, see the [Python packaging user guide](https://packaging.python.org/tutorials/installing-packages/).
+
+---
+
+## 🏁 Quickstart
+
+Sort your Downloads folder by file type:
 
 ```bash
-fileorganizer sort /path/to/directory --by type
+organiserpro sort --directory ~/Downloads
 ```
 
-### Sort files by date (group by year-month)
+Remove duplicate files in a folder:
 
 ```bash
-fileorganizer sort /path/to/directory --by date --date-format "%Y-%m"
+organiserpro deduplicate --directory ~/Pictures
 ```
 
-### Find duplicate files (dry run)
+*Preview actions before making changes:*
 
 ```bash
-fileorganizer dedupe /path/to/directory --dry-run
+organiserpro sort --directory ~/Documents --dry-run
 ```
 
-### Remove duplicate files (keeping the oldest copy)
+See more in the [Documentation](https://organiserpro.readthedocs.io/en/latest/).
 
-```bash
-fileorganizer dedupe /path/to/directory --delete
+---
+
+## 📸 Example Output
+
 ```
-
-### Move duplicates to a different directory
-
-```bash
-fileorganizer dedupe /path/to/directory --move-to /path/to/duplicates
+[16:32:01] Sorting 150 files in /Users/you/Downloads
+┣━━ Images (43)
+┣━━ Documents (58)
+┣━━ Archives (22)
+┣━━ Others (27)
+✔ All files sorted in 2.3 seconds.
 ```
+*(Add a screenshot or GIF here if possible for more visual appeal!)*
 
-## 📝 Examples
+---
 
-### Example 1: Organize your Downloads folder
+## 📚 Documentation
 
-```bash
-# Sort files by type
-fileorganizer sort ~/Downloads --by type
+- [Full Documentation](https://organiserpro.readthedocs.io/en/latest/)
+- [Troubleshooting](TROUBLESHOOTING.md)
+- [Changelog](CHANGELOG.md)
+- [Roadmap](ROADMAP.md)
 
-# Then find and remove duplicates
-fileorganizer dedupe ~/Downloads --delete
-```
-
-### Example 2: Organize photos by year and month
-
-```bash
-fileorganizer sort ~/Pictures/Photos --by date --date-format "%Y/%m"
-```
-
-## 🧪 Running Tests
-
-### Install test dependencies
-
-```bash
-# Install test dependencies
-pip install -e ".[test]"
-
-# Run tests
-pytest -v
-```
+---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We love contributions! Please see our [Contributing Guide](CONTRIBUTING.md), [Code of Conduct](CODE_OF_CONDUCT.md), and [Security Policy](SECURITY.md).
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+---
 
-## 📄 License
+## 🛡 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+[MIT License](LICENSE) © [The Solution Desk](https://github.com/the-solution-desk)
 
-## 👏 Credits
+---
 
-- Built with ❤️ by [Amber Boudreau](https://github.com/the-solution-desk)
-- Uses [Click](https://click.palletsprojects.com/) for CLI
-- Beautiful output powered by [Rich](https://github.com/Textualize/rich)
+## 💬 Need Help?
+
+- Open an [issue](https://github.com/the-solution-desk/organiserpro/issues)
+- Join the discussion or reach out via [Discussions](https://github.com/the-solution-desk/organiserpro/discussions)
+
+---
