@@ -50,7 +50,7 @@ def test_cli_no_args_shows_help(runner: CliRunner) -> None:
 
 @patch("OrganiserPro.cli.sort_by_type")
 def test_cli_sort_type(mock_sort: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
-    """Test the sort --type command."""
+    """Test the sort --by type command."""
     # Create a test file
     (temp_dir / "test.txt").write_text("test")
 
@@ -63,7 +63,7 @@ def test_cli_sort_type(mock_sort: MagicMock, runner: CliRunner, temp_dir: Path) 
 
 @patch("OrganiserPro.cli.sort_by_date")
 def test_cli_sort_date(mock_sort: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
-    """Test the sort --date command."""
+    """Test the sort --by date command."""
     result = runner.invoke(cli, ["sort", str(temp_dir), "--by", "date"])
     assert result.exit_code == 0
     mock_sort.assert_called_once_with(str(temp_dir), "%Y-%m")
@@ -71,7 +71,7 @@ def test_cli_sort_date(mock_sort: MagicMock, runner: CliRunner, temp_dir: Path) 
 
 @patch("OrganiserPro.cli.sort_by_date")
 def test_cli_sort_date_with_format(mock_sort: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
-    """Test the sort --date command with a custom format."""
+    """Test the sort --by date command with a custom format."""
     result = runner.invoke(
         cli, ["sort", str(temp_dir), "--by", "date", "--date-format", "%Y/%m"]
     )
@@ -93,10 +93,10 @@ def test_cli_sort_no_args_uses_default(mock_sort: MagicMock, runner: CliRunner, 
     assert str(Path(temp_dir).resolve()) in str(mock_sort.call_args[0][0])
 
 
-@patch("OrganiserPro.cli.find_duplicates_cli")
-def test_cli_dedupe_dry_run(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
+@patch("OrganiserPro.cli.dedupe")
+def test_cli_dedup_dry_run(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
     """Test the dedupe command with dry run."""
-    # Mock the find_duplicates_cli function to return some test data
+    # Mock the dedupe function to return some test data
     mock_find.return_value = {
         "hash1": [str(temp_dir / "file1.txt"), str(temp_dir / "file2.txt")],
         "hash2": [str(temp_dir / "file3.txt")],
@@ -112,41 +112,41 @@ def test_cli_dedupe_dry_run(mock_find: MagicMock, runner: CliRunner, temp_dir: P
         recursive=True,  # Default value
         delete=False,  # Overridden by dry-run
         move_to=None,  # Not specified
+        dry_run=True,
     )
 
 
-@patch("OrganiserPro.cli.find_duplicates_cli")
-def test_cli_dedupe_recursive(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
+@patch("OrganiserPro.cli.dedupe")
+def test_cli_dedup_recursive(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
     """Test the dedupe command with recursive search."""
-    mock_find.return_value = {}
-
     result = runner.invoke(cli, ["dedupe", str(temp_dir), "--recursive"])
     assert result.exit_code == 0
     mock_find.assert_called_once_with(
-        directory=str(temp_dir), recursive=True, delete=False, move_to=None
+        directory=str(temp_dir),
+        recursive=True,
+        delete=False,
+        move_to=None,
+        dry_run=False,
     )
 
 
-@patch("OrganiserPro.cli.find_duplicates_cli")
-def test_cli_dedupe_delete(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
+@patch("OrganiserPro.cli.dedupe")
+def test_cli_dedup_delete(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
     """Test the dedupe command with delete option."""
-    mock_find.return_value = {}
-
     result = runner.invoke(cli, ["dedupe", str(temp_dir), "--delete"])
     assert result.exit_code == 0
     mock_find.assert_called_once_with(
         directory=str(temp_dir),
-        recursive=True,  # Default value
-        delete=True,  # Set by --delete
-        move_to=None,  # Not specified
+        recursive=False,
+        delete=True,
+        move_to=None,
+        dry_run=False,
     )
 
 
-@patch("OrganiserPro.cli.find_duplicates_cli")
+@patch("OrganiserPro.cli.dedupe")
 def test_cli_dedupe_move_to(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
     """Test the dedupe command with move-to option."""
-    mock_find.return_value = {}
-
     # Create a directory to move duplicates to
     move_dir = temp_dir / "duplicates"
     move_dir.mkdir()
@@ -160,11 +160,12 @@ def test_cli_dedupe_move_to(mock_find: MagicMock, runner: CliRunner, temp_dir: P
         recursive=True,  # Default value
         delete=False,  # Not deleting, moving instead
         move_to=str(move_dir),
+        dry_run=False,
     )
 
 
-def test_cli_dedupe_no_directory_fails(runner: CliRunner) -> None:
+def test_cli_dedup_no_directory_fails(runner: CliRunner) -> None:
     """Test that dedupe with no directory fails."""
     result = runner.invoke(cli, ["dedupe"])
     assert result.exit_code != 0
-    assert "Error: Missing argument 'DIRECTORY'" in result.output
+    assert "Error: Missing argument 'DIRECTORY'." in result.output
