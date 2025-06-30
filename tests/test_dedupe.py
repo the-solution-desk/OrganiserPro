@@ -1,5 +1,7 @@
 """Tests for the OrganiserPro.dedupe module."""
 
+import hashlib
+import os
 from pathlib import Path
 import pytest
 from OrganiserPro.dedupe import find_duplicates, handle_duplicates, get_file_hash
@@ -89,14 +91,15 @@ def test_handle_duplicates_dry_run(temp_dir: Path, capsys):
 
     # Verify output
     captured = capsys.readouterr()
-    assert "3 files" in captured.out
-    assert "No action taken" in captured.out
+    output = captured.out
+    assert "2 duplicate files in 1 groups" in output
+    assert "Note: Use --delete to remove duplicates or --move-to to move them" in output
 
     # Verify no files were deleted or moved
     assert all(file.exists() for file in files)
 
 
-def test_handle_duplicates_delete(temp_dir: Path, mock_print):
+def test_handle_duplicates_delete(temp_dir: Path, capsys):
     """Test handling duplicates with delete option."""
     # Create test files with same content
     file1 = temp_dir / "file1.txt"
@@ -104,15 +107,24 @@ def test_handle_duplicates_delete(temp_dir: Path, mock_print):
     file1.write_text("test content")
     file2.write_text("test content")
 
+    # Set file1 to be older than file2
+    file1_timestamp = 1642204800  # 2022-01-15
+    file2_timestamp = 1642291200  # 2022-01-16
+    os.utime(file1, (file1_timestamp, file1_timestamp))
+    os.utime(file2, (file2_timestamp, file2_timestamp))
+
     duplicates = {"hash1": [file1, file2]}
     handle_duplicates(duplicates, delete=True)
+
+    # Verify output
+    captured = capsys.readouterr()
+    assert "deleted" in captured.out.lower()
 
     # Check that only one file remains
     remaining_files = list(temp_dir.glob("*"))
     assert len(remaining_files) == 1
-    assert files[0].exists()  # Oldest file should be kept
-    assert not files[1].exists()
-    assert not files[2].exists()
+    assert file1.exists()  # Older file should be kept
+    assert not file2.exists()  # Newer file should be deleted
 
 
 def test_handle_duplicates_move_to(temp_dir: Path):

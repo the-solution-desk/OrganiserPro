@@ -1,9 +1,10 @@
 from collections import defaultdict
 from hashlib import sha256
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from rich.console import Console
+from rich.progress import Progress
 from rich.prompt import Confirm
 
 console = Console()
@@ -33,24 +34,35 @@ def get_file_hash(file_path: Path, block_size: int = 65536) -> str:
         return ""
 
 
-def find_duplicates(directory: str) -> Dict[str, List[Path]]:
+def find_duplicates(directory: str, recursive: bool = False) -> Dict[str, List[Path]]:
     """
     Find duplicate files in the given directory.
 
     Args:
         directory: Directory to search for duplicate files
+        recursive: If True, search recursively in subdirectories
 
     Returns:
         Dict mapping file hashes to lists of duplicate file paths
     """
     files_by_size: Dict[int, List[Path]] = defaultdict(list)
     files_by_hash: Dict[str, List[Path]] = defaultdict(list)
+    dir_path = Path(directory)
+
+    if not dir_path.exists() or not dir_path.is_dir():
+        console.print(f"[red]Error: {directory} is not a valid directory")
+        return {}
 
     # First group files by size (potential duplicates will have same size)
     with Progress() as progress:
         task = progress.add_task("Scanning files...", total=0)
 
-        all_files = list(Path(directory).glob("*"))
+        # Get all files, recursively if requested
+        if recursive:
+            all_files = list(dir_path.rglob("*"))
+        else:
+            all_files = list(dir_path.glob("*"))
+            
         progress.update(task, total=len(all_files))
 
         for file_path in all_files:
@@ -90,14 +102,17 @@ def handle_duplicates(
         delete: If True, delete all but the first file in each duplicate set
         move_to: If provided, move duplicates to this directory instead of deleting
     """
-    total_duplicates = sum(
-        len(files) - 1 for files in duplicates.values() if len(files) > 1
-    )
-    if total_duplicates == 0:
+    # Count total files in all duplicate groups (excluding the first file in each group)
+    total_duplicate_groups = sum(1 for files in duplicates.values() if len(files) > 1)
+    total_duplicate_files = sum(len(files) - 1 for files in duplicates.values() if len(files) > 1)
+    
+    if total_duplicate_groups == 0:
         console.print("[green]No duplicate files found![/green]")
         return
 
-    console.print(f"\n[bold]Found {total_duplicates} duplicate files:")
+    # Prepare the summary message
+    file_word = "file" if total_duplicate_files == 1 else "files"
+    console.print(f"\nFound {total_duplicate_files} duplicate {file_word} in {total_duplicate_groups} groups:")
 
     # Create destination directory if moving files
     if move_to:

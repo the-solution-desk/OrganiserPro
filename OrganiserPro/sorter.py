@@ -1,3 +1,6 @@
+import os
+import shutil
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 
@@ -114,6 +117,10 @@ def sort_by_date(directory: str, date_format: str = "%Y-%m") -> None:
         console.print("[yellow]No files found to sort![/]")
         return
 
+    # Track processed files and created directories
+    files_processed = 0
+    date_dirs_created = set()
+
     # Process files with progress
     with Progress() as progress:
         task = progress.add_task("Sorting files...", total=len(all_files))
@@ -124,7 +131,12 @@ def sort_by_date(directory: str, date_format: str = "%Y-%m") -> None:
                     mod_time = file_path.stat().st_mtime
                     date_str = datetime.fromtimestamp(mod_time).strftime(date_format)
                     target_dir = source_dir / date_str
-                    target_dir.mkdir(exist_ok=True)
+                    
+                    # Create target directory if it doesn't exist
+                    if date_str not in date_dirs_created:
+                        target_dir.mkdir(exist_ok=True)
+                        date_dirs_created.add(date_str)
+                        
                     target_path = target_dir / file_path.name
 
                     # Handle filename conflicts
@@ -137,13 +149,11 @@ def sort_by_date(directory: str, date_format: str = "%Y-%m") -> None:
 
                     # Move the file
                     file_path.rename(target_path)
+                    files_processed += 1
                 except (OSError, PermissionError) as e:
                     msg = f"[yellow]Warning: Could not process {file_path}: {e}"
                     console.print(msg)
                     continue
-
-                # Move the file
-                file_path.rename(target_path)
 
             progress.update(task, advance=1)
 
