@@ -1,11 +1,11 @@
 # 🗂️ OrganiserPro
 
-[![PyPI](https://img.shields.io/pypi/v/organiserpro)](https://pypi.org/project/organiserpro/)
-[![Python Version](https://img.shields.io/pypi/pyversions/organiserpro)](https://www.python.org/downloads/)
-[![Tests](https://github.com/the-solution-desk/organiserpro/actions/workflows/ci.yml/badge.svg)](https://github.com/the-solution-desk/organiserpro/actions/workflows/ci.yml)
-[![Codecov](https://codecov.io/gh/the-solution-desk/organiserpro/branch/main/graph/badge.svg)](https://codecov.io/gh/the-solution-desk/organiserpro)
+[![PyPI version](https://img.shields.io/pypi/v/organiserpro.svg)](https://pypi.org/project/organiserpro/)
+[![Python versions](https://img.shields.io/pypi/pyversions/organiserpro.svg)](https://pypi.org/project/organiserpro/)
+[![Tests](https://github.com/the-solution-desk/OrganiserPro/actions/workflows/ci.yml/badge.svg)](https://github.com/the-solution-desk/OrganiserPro/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/the-solution-desk/OrganiserPro/branch/main/graph/badge.svg)](https://codecov.io/gh/the-solution-desk/OrganiserPro)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Documentation Status](https://readthedocs.org/projects/organiserpro/badge/?version=latest)](https://organiserpro.readthedocs.io/en/latest/?badge=latest)
 
 > **OrganiserPro** is a powerful, cross-platform command-line tool for sorting, deduplicating, and managing your files with ease. Keep your files tidy—sort, organize, and eliminate clutter in seconds.
