@@ -4,7 +4,7 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
-from typing import Generator
+from typing import Generator, List, Tuple
 
 import pytest
 
@@ -25,7 +25,7 @@ def test_data_dir() -> Path:
     return Path(__file__).parent / "data"
 
 
-def create_test_files(directory: Path, file_list: list[tuple[str, str]]) -> None:
+def create_test_files(directory: Path, file_list: List[Tuple[str, str]]) -> None:
     """Create test files in the specified directory.
 
     Args:
