@@ -3,7 +3,7 @@
 API Reference
 ============
 
-This document provides detailed information about the FileOrganizer API. It's intended for developers who want to extend or modify the functionality of FileOrganizer.
+This document provides detailed information about the OrganiserPro API. It's intended for developers who want to extend or modify the functionality of OrganiserPro.
 
 .. toctree::
    :maxdepth: 2

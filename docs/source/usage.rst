@@ -3,7 +3,7 @@
 Usage
 =====
 
-FileOrganizer provides a command-line interface (CLI) for organizing and managing files. This document explains how to use the various commands and options available.
+OrganiserPro provides a command-line interface (CLI) for organizing and managing files. This document explains how to use the various commands and options available.
 
 Basic Commands
 -------------

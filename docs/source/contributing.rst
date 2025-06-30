@@ -1,18 +1,18 @@
 .. _contributing:
 
-Contributing to FileOrganizer
+Contributing to OrganiserPro
 ============================
 
-Thank you for your interest in contributing to FileOrganizer! We welcome contributions from everyone, whether you're a developer, designer, writer, or just someone with a good idea.
+Thank you for your interest in contributing to OrganiserPro! We welcome contributions from everyone, whether you're a developer, designer, writer, or just someone with a good idea.
 
 Ways to Contribute
 -----------------
 
-There are many ways to contribute to FileOrganizer:
+There are many ways to contribute to OrganiserPro:
 
 - **Code contributions**: Fix bugs, implement new features, or improve existing code
 - **Documentation**: Improve documentation, fix typos, or add examples
-- **Bug reports**: Report bugs you find while using FileOrganizer
+- **Bug reports**: Report bugs you find while using OrganiserPro
 - **Feature requests**: Suggest new features or improvements
 - **Testing**: Help test the software and report issues
 - **Community**: Help answer questions on issue trackers or forums
@@ -154,4 +154,4 @@ Please note that this project is released with a Contributor Code of Conduct. By
 
 License
 ------
-By contributing to FileOrganizer, you agree that your contributions will be licensed under the MIT License.
+By contributing to OrganiserPro, you agree that your contributions will be licensed under the MIT License.

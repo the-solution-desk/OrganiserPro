@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.abspath('../../'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'FileOrganizer'
+project = 'OrganiserPro'
 copyright = f'{datetime.now().year}, Amber Boudreau'
 author = 'Amber Boudreau'
 

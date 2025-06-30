@@ -36,7 +36,7 @@ Removed
 
 Added
 ~~~~~
-- Initial release of FileOrganizer
+- Initial release of OrganiserPro
 - Basic file sorting by type and date
 - Duplicate file detection and handling
 - Command-line interface with help and version options

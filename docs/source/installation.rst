@@ -44,7 +44,7 @@ After installation, verify that the installation was successful by running:
 
    OrganiserPro --version
 
-This should display the installed version of FileOrganizer.
+This should display the installed version of OrganiserPro.
 
 Development Dependencies
 -----------------------
