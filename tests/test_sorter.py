@@ -1,4 +1,5 @@
 """Tests for the OrganiserPro.sorter module."""
+
 from pathlib import Path
 import pytest
 from OrganiserPro.sorter import sort_by_type, sort_by_date, get_file_extension

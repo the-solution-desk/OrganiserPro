@@ -73,11 +73,12 @@ def sort(directory: str, by: str, date_format: str, dry_run: bool):
                 sort_by_type(directory)
             else:
                 from pathlib import Path  # noqa: F811
+
                 # Simulate finding files
                 exts = set(
                     p.suffix.lower()
                     for p in Path(directory).iterdir()
-                    if p.is_file() and not p.name.startswith('.')
+                    if p.is_file() and not p.name.startswith(".")
                 )
                 msg = f"Would group files by type into folders: "
                 msg += f"{', '.join(exts) if exts else 'No files found'}"
@@ -91,6 +92,7 @@ def sort(directory: str, by: str, date_format: str, dry_run: bool):
                 sort_by_date(directory, date_format)
             else:
                 from datetime import datetime  # noqa: F811
+
                 # Simulate finding files
                 console.print(f"Would group files by date in format: {date_format}")
 

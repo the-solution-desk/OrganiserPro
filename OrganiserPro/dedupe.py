@@ -84,7 +84,7 @@ def handle_duplicates(
     move_to: Optional[str] = None,
 ) -> None:
     """Handle duplicate files by printing, deleting, or moving them.
-    
+
     Args:
         duplicates: Dictionary mapping file hashes to lists of duplicate files
         delete: If True, delete all but the first file in each duplicate set
@@ -98,22 +98,22 @@ def handle_duplicates(
         return
 
     console.print(f"\n[bold]Found {total_duplicates} duplicate files:")
-    
+
     # Create destination directory if moving files
     if move_to:
         move_to_path = Path(move_to).expanduser().resolve()
         move_to_path.mkdir(parents=True, exist_ok=True)
-    
+
     for file_hash, files in duplicates.items():
         if len(files) <= 1:
             continue
-            
+
         console.print(f"\n[bold]Hash:[/] {file_hash[:8]}...")
-        
+
         # Keep the first file, handle the rest as duplicates
         original = files[0]
         console.print(f"  [green]Keep:[/] {original}")
-        
+
         for duplicate in files[1:]:
             if delete:
                 try:
@@ -138,7 +138,7 @@ def handle_duplicates(
                     console.print(msg)
             else:
                 console.print(f"  [yellow]Duplicate:[/] {duplicate}")
-    
+
     if not delete and not move_to:
         msg = "\n[bold]Note:[/] Use --delete to remove "
         msg += "duplicates or --move-to to move them"
@@ -148,29 +148,28 @@ def handle_duplicates(
 def find_duplicates_cli(directory: str) -> None:
     """CLI interface for finding and handling duplicate files."""
     console = Console()
-    
+
     if not Confirm.ask(
-        "\n[red]WARNING: This will delete duplicate files. Continue?",
-        default=False
+        "\n[red]WARNING: This will delete duplicate files. Continue?", default=False
     ):
         return
-    
+
     duplicates = find_duplicates(directory)
-    
+
     if not duplicates:
         console.print("\n[green]No duplicate files found![/]")
         return
-    
+
     # Create and display a table of duplicates
     table = Table(title="Duplicate Files")
     table.add_column("Hash", style="cyan")
     table.add_column("Files", style="magenta")
-    
+
     for file_hash, files in duplicates.items():
         table.add_row(file_hash[:8] + "...", "\n".join(str(f) for f in files))
-    
+
     console.print(table)
-    
+
     if Confirm.ask("\nDelete all but the first of each duplicate?", default=False):
         handle_duplicates(duplicates, delete=True)
     elif Confirm.ask("Move duplicates to a different directory?", default=False):

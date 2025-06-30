@@ -1,4 +1,5 @@
 """Tests for the OrganiserPro.cli module."""
+
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 

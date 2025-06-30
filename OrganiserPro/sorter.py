@@ -9,16 +9,16 @@ console = Console()
 
 def get_file_extension(file_path: Path) -> str:
     """Get the lowercase file extension without the dot.
-    
+
     Args:
         file_path: Path to the file
-        
+
     Returns:
         str: The file extension without the dot, or the full name if no extension,
              or empty string for hidden files
     """
-    if file_path.name.startswith('.'):
-        return ''
+    if file_path.name.startswith("."):
+        return ""
     if not file_path.suffix:
         return file_path.name
     return file_path.suffix[1:].lower()
@@ -26,7 +26,7 @@ def get_file_extension(file_path: Path) -> str:
 
 def sort_by_type(directory: str) -> None:
     """Sort files in the given directory into subdirectories by file type.
-    
+
     Args:
         directory: Path to the directory containing files to sort
     """
@@ -117,16 +117,16 @@ def sort_by_date(directory: str, date_format: str = "%Y-%m") -> None:
     # Process files with progress
     with Progress() as progress:
         task = progress.add_task("Sorting files...", total=len(all_files))
-        
+
         for file_path in all_files:
-            if file_path.is_file() and not file_path.name.startswith('.'):
+            if file_path.is_file() and not file_path.name.startswith("."):
                 try:
                     mod_time = file_path.stat().st_mtime
                     date_str = datetime.fromtimestamp(mod_time).strftime(date_format)
                     target_dir = source_dir / date_str
                     target_dir.mkdir(exist_ok=True)
                     target_path = target_dir / file_path.name
-                    
+
                     # Handle filename conflicts
                     counter = 1
                     while target_path.exists():
