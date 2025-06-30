@@ -91,8 +91,6 @@ See more in the [Documentation](https://organiserpro.readthedocs.io/en/latest/).
 ┣━━ Others (27)
 ✔ All files sorted in 2.3 seconds.
 ```
-*(Add a screenshot or GIF here if possible for more visual appeal!)*
-
 ---
 
 ## 📚 Documentation
