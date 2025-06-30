@@ -1,4 +1,4 @@
-# OrganiserPro
+# 🗂️ OrganiserPro
 
 [![PyPI](https://img.shields.io/pypi/v/organiserpro)](https://pypi.org/project/organiserpro/)
 [![Python Version](https://img.shields.io/pypi/pyversions/organiserpro)](https://www.python.org/downloads/)
@@ -9,8 +9,6 @@
 [![Documentation Status](https://readthedocs.org/projects/organiserpro/badge/?version=latest)](https://organiserpro.readthedocs.io/en/latest/?badge=latest)
 
 > **OrganiserPro** is a powerful, cross-platform command-line tool for sorting, deduplicating, and managing your files with ease. Keep your files tidy—sort, organize, and eliminate clutter in seconds.
-
----
 
 ## ✨ Features
 
@@ -30,24 +28,89 @@
   - Progress bars for long operations
   - Clear error messages and comprehensive help system
 
----
-
 ## 🚀 Installation
 
-**Prerequisites:**  
-- Python 3.7 or higher  
-- [pip](https://pip.pypa.io/en/stable/) (Python package manager)
+### Prerequisites
+- Python 3.8 or higher
+- pip (Python package manager)
 
-**The recommended way to install OrganiserPro is in a virtual environment.**
+### Quick Install
 
 ```bash
-# Create and activate a virtual environment (recommended)
-python3 -m venv organiserpro-env
-source organiserpro-env/bin/activate  # On Windows use: organiserpro-env\Scripts\activate
-
-# Install OrganiserPro from PyPI
 pip install organiserpro
 ```
+
+### Recommended: Using a Virtual Environment
+
+```bash
+# Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install OrganiserPro
+pip install organiserpro
+```
+
+## 🛠️ Usage
+
+### Basic Commands
+
+```bash
+# Sort files in a directory
+organiserpro sort /path/to/directory
+
+# Find and remove duplicates
+organiserpro dedupe /path/to/directory
+
+# Get help
+organiserpro --help
+```
+
+### Examples
+
+```bash
+# Sort files by type
+organiserpro sort ~/Downloads --by type
+
+# Sort files by date
+organiserpro sort ~/Pictures --by date --date-format "%Y-%m"
+
+# Dry run to see what would be done
+organiserpro sort ~/Documents --dry-run
+```
+
+## 📚 Documentation
+
+For detailed documentation, including advanced usage and configuration options, please visit our [Read the Docs](https://organiserpro.readthedocs.io/).
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on how to contribute to this project.
+
+### Development Setup
+
+1. Fork the repository
+2. Create a new branch: `git checkout -b feature/your-feature`
+3. Install development dependencies:
+   ```bash
+   pip install -e ".[dev]"
+   pre-commit install
+   ```
+4. Make your changes and run tests:
+   ```bash
+   pytest
+   ```
+5. Commit your changes: `git commit -m "Add some feature"`
+6. Push to the branch: `git push origin feature/your-feature`
+7. Create a new Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📬 Contact
+
+For any questions or suggestions, please reach out to us at [your.email@example.com](mailto:your.email@example.com) or open an issue on our [GitHub repository](https://github.com/the-solution-desk/organiserpro).
 
 > **Note for Ubuntu/Debian/Python 3.12+ users:**  
 > If you try to install system-wide with pip, you may see an `externally-managed-environment` error due to recent changes in Python packaging (PEP 668).  
