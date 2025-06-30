@@ -70,7 +70,7 @@ def test_cli_sort_date(mock_sort: MagicMock, runner: CliRunner, temp_dir: Path) 
     from OrganiserPro.cli import cli as cli_command
     result = runner.invoke(cli_command, ["sort", str(temp_dir), "--by", "date"])
     assert result.exit_code == 0
-    mock_sort.assert_called_once_with(str(temp_dir), "%Y-%m")
+    mock_sort.assert_called_once_with(str(temp_dir), "%Y-%m", False)
 
 
 @patch("OrganiserPro.cli.sort_by_date")
