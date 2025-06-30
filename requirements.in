@@ -1,0 +1,11 @@
+# Core dependencies
+click>=8.0.0
+pathlib2>=2.3.0
+python-magic>=0.4.0
+PyYAML>=6.0.0
+rich>=10.0.0
+
+# Optional dependencies
+tqdm>=4.0.0  # For progress bars
+pillow>=8.0.0  # For image processing
+python-dateutil>=2.8.0  # For date parsing

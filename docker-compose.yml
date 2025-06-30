@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  fileorganizer:
+    build:
+      context: .
+      target: runtime
+    volumes:
+      - .:/app
+      - fileorganizer-data:/data
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+    entrypoint: ["fileorganizer"]
+    command: ["--help"]
+
+  dev:
+    build:
+      context: .
+      target: builder
+    volumes:
+      - .:/app
+      - fileorganizer-data:/data
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+    entrypoint: ["bash"]
+    tty: true
+    stdin_open: true
+
+  test:
+    build:
+      context: .
+      target: builder
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["pytest", "-v", "--cov=fileorganizer", "--cov-report=term-missing"]
+
+  lint:
+    build:
+      context: .
+      target: builder
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["bash", "-c", "black --check fileorganizer tests && flake8 fileorganizer tests && isort --check-only fileorganizer tests"]
+
+  typecheck:
+    build:
+      context: .
+      target: builder
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["mypy", "--strict", "--ignore-missing-imports", "fileorganizer"]
+
+  docs:
+    build:
+      context: .
+      target: builder
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["sphinx-build", "-b", "html", "docs", "docs/_build/html"]
+    ports:
+      - "8000:8000"
+
+volumes:
+  fileorganizer-data:

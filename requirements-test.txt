@@ -1,0 +1,37 @@
+# Test dependencies
+pytest>=6.0.0
+pytest-cov>=2.0.0
+pytest-mock>=3.0.0
+pytest-xdist>=2.0.0
+coverage>=6.0.0
+pytest-randomly>=3.0.0
+pytest-benchmark>=3.4.0
+pytest-timeout>=2.0.0
+pytest-html>=3.0.0
+pytest-sugar>=0.9.0
+pytest-instafail>=0.4.0
+pytest-cov>=2.0.0
+
+# Test utilities
+hypothesis>=6.0.0
+freezegun>=1.0.0
+
+# Code coverage
+codecov>=2.0.0
+coveralls>=3.0.0
+
+# Type checking for tests
+typing-extensions>=4.0.0
+
+# Test data generation
+Faker>=12.0.0
+
+# HTTP testing
+pytest-httpserver>=1.0.0
+requests-mock>=1.9.0
+
+# CLI testing
+pytest-console-scripts>=1.0.0
+
+# Output capture
+pytest-snapshot>=0.6.0

@@ -1,0 +1,21 @@
+include LICENSE
+include README.md
+include CHANGELOG.md
+include CONTRIBUTING.md
+include CONTRIBUTORS.md
+include SECURITY.md
+include requirements.txt
+recursive-include docs *
+recursive-include tests *
+recursive-include fileorganizer *.py
+prune docs/_build
+prune .github
+prune .git
+prune .pytest_cache
+prune .mypy_cache
+prune .venv
+prune venv
+prune env
+prune build
+prune dist
+prune *.egg-info
