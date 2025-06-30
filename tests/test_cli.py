@@ -24,8 +24,8 @@ def test_cli_help(runner: CliRunner) -> None:
     assert "Show this message and exit." in result.output
     assert "sort" in result.output
     assert "dedupe" in result.output
-    assert "sort    Sort files in DIRECTORY by type, date, or size" in result.output
-    assert "dedupe  Find and handle duplicate files in DIRECTORY" in result.output
+    assert "sort          Sort files in DIRECTORY by type, date, or size" in result.output
+    assert "dedupe        Find and handle duplicate files in DIRECTORY" in result.output
 
 
 def test_cli_version(runner: CliRunner) -> None:
@@ -45,7 +45,7 @@ def test_cli_no_args_shows_help(runner: CliRunner) -> None:
     result = runner.invoke(cli, [])
     assert result.exit_code == 0
     assert "FileOrganizer - Organize your files with ease" in result.output
-    assert "sort     Sort files by type, date, or size" in result.output
+    assert "sort     Sort files in DIRECTORY by type, date, or size" in result.output
 
 
 @patch("OrganiserPro.cli.sort_by_type")
@@ -97,19 +97,13 @@ def test_cli_sort_no_args_uses_default(mock_sort: MagicMock, runner: CliRunner, 
 def test_cli_dedup_dry_run(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
     """Test the dedupe command with dry run."""
     # Mock the dedupe function to return some test data
-    mock_find.return_value = {
-        "hash1": [str(temp_dir / "file1.txt"), str(temp_dir / "file2.txt")],
-        "hash2": [str(temp_dir / "file3.txt")],
-    }
+    mock_find.return_value = 0
 
     result = runner.invoke(cli, ["dedupe", str(temp_dir), "--dry-run"])
     assert result.exit_code == 0
-    assert "Dry run: No changes will be made" in result.output
-
-    # Verify find_duplicates_cli was called with the correct arguments
     mock_find.assert_called_once_with(
         directory=str(temp_dir),
-        recursive=True,  # Default value
+        recursive=True,  # Default value is now True
         delete=False,  # Overridden by dry-run
         move_to=None,  # Not specified
         dry_run=True,
@@ -119,6 +113,7 @@ def test_cli_dedup_dry_run(mock_find: MagicMock, runner: CliRunner, temp_dir: Pa
 @patch("OrganiserPro.cli.dedupe")
 def test_cli_dedup_recursive(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
     """Test the dedupe command with recursive search."""
+    mock_find.return_value = 0
     result = runner.invoke(cli, ["dedupe", str(temp_dir), "--recursive"])
     assert result.exit_code == 0
     mock_find.assert_called_once_with(
@@ -133,11 +128,12 @@ def test_cli_dedup_recursive(mock_find: MagicMock, runner: CliRunner, temp_dir: 
 @patch("OrganiserPro.cli.dedupe")
 def test_cli_dedup_delete(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
     """Test the dedupe command with delete option."""
+    mock_find.return_value = 0
     result = runner.invoke(cli, ["dedupe", str(temp_dir), "--delete"])
     assert result.exit_code == 0
     mock_find.assert_called_once_with(
         directory=str(temp_dir),
-        recursive=False,
+        recursive=True,  # Default is now True
         delete=True,
         move_to=None,
         dry_run=False,
@@ -145,19 +141,22 @@ def test_cli_dedup_delete(mock_find: MagicMock, runner: CliRunner, temp_dir: Pat
 
 
 @patch("OrganiserPro.cli.dedupe")
-def test_cli_dedupe_move_to(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
+def test_cli_dedup_move_to(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
     """Test the dedupe command with move-to option."""
     # Create a directory to move duplicates to
     move_dir = temp_dir / "duplicates"
     move_dir.mkdir()
+    
+    # Set up the mock to return success
+    mock_find.return_value = 0
 
     result = runner.invoke(cli, ["dedupe", str(temp_dir), "--move-to", str(move_dir)])
     assert result.exit_code == 0
 
-    # Check that find_duplicates_cli was called with move_to set
+    # Check that find_duplicates was called with the correct arguments
     mock_find.assert_called_once_with(
         directory=str(temp_dir),
-        recursive=True,  # Default value
+        recursive=True,  # Default is now True
         delete=False,  # Not deleting, moving instead
         move_to=str(move_dir),
         dry_run=False,

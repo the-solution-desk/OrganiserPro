@@ -7,7 +7,7 @@ name = "OrganiserPro"
 dynamic = ["version"]
 description = "A powerful file organization tool"
 readme = "README.md"
-requires-python = ">=3.8,<3.14"
+requires-python = ">=3.8,<3.15"
 license = {text = "MIT"}
 authors = [
     {name = "Amber Boudreau", email = "your.email@example.com"}
