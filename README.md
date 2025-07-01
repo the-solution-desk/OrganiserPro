@@ -1,7 +1,7 @@
 # 🗂️ OrganiserPro
 
 [![PyPI version](https://img.shields.io/pypi/v/organiserpro.svg)](https://pypi.org/project/organiserpro/)
-[![Python 3.8-3.13](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10%20|%203.11%20|%203.12%20|%203.13-blue)](https://pypi.org/project/organiserpro/)
+[![Python 3.8–3.13](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10%20|%203.11%20|%203.12%20|%203.13-blue)](https://pypi.org/project/organiserpro/)
 [![Tests](https://github.com/the-solution-desk/OrganiserPro/actions/workflows/ci.yml/badge.svg)](https://github.com/the-solution-desk/OrganiserPro/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/the-solution-desk/OrganiserPro/branch/main/graph/badge.svg)](https://codecov.io/gh/the-solution-desk/OrganiserPro)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -9,6 +9,8 @@
 [![Documentation Status](https://readthedocs.org/projects/organiserpro/badge/?version=latest)](https://organiserpro.readthedocs.io/en/latest/?badge=latest)
 
 > **OrganiserPro** is a powerful, cross-platform command-line tool for sorting, deduplicating, and managing your files with ease. Keep your files tidy—sort, organize, and eliminate clutter in seconds.
+
+---
 
 ## ✨ Features
 
@@ -24,9 +26,11 @@
   - Recursive directory scanning
 
 - **User-Friendly**
-  - Beautiful terminal output powered by `rich`
+  - Beautiful terminal output powered by [`rich`](https://github.com/Textualize/rich)
   - Progress bars for long operations
   - Clear error messages and comprehensive help system
+
+---
 
 ## 🚀 Installation
 
@@ -40,16 +44,15 @@
 pip install organiserpro
 ```
 
-### Recommended: Using a Virtual Environment
+### Using a Virtual Environment (Recommended)
 
 ```bash
-# Create and activate a virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install OrganiserPro
 pip install organiserpro
 ```
+
+---
 
 ## 🛠️ Usage
 
@@ -75,17 +78,62 @@ organiserpro sort ~/Downloads --by type
 # Sort files by date
 organiserpro sort ~/Pictures --by date --date-format "%Y-%m"
 
-# Dry run to see what would be done
+# Preview actions without making changes (dry run)
 organiserpro sort ~/Documents --dry-run
 ```
 
+---
+
+## 🏁 Quickstart
+
+Sort your Downloads folder by file type:
+
+```bash
+organiserpro sort ~/Downloads
+```
+
+Remove duplicate files in a folder:
+
+```bash
+organiserpro dedupe ~/Pictures
+```
+
+Preview actions before making changes:
+
+```bash
+organiserpro sort ~/Documents --dry-run
+```
+
+See more in the [Documentation](https://organiserpro.readthedocs.io/en/latest/).
+
+---
+
+## 📸 Example Output
+
+```
+[16:32:01] Sorting 150 files in /Users/you/Downloads
+┣━━ Images (43)
+┣━━ Documents (58)
+┣━━ Archives (22)
+┣━━ Others (27)
+✔ All files sorted in 2.3 seconds.
+```
+
+---
+
 ## 📚 Documentation
 
-For detailed documentation, including advanced usage and configuration options, please visit our [Read the Docs](https://organiserpro.readthedocs.io/).
+For full documentation, advanced usage, and configuration options, visit [Read the Docs](https://organiserpro.readthedocs.io/).
+
+- [Troubleshooting](TROUBLESHOOTING.md)
+- [Changelog](CHANGELOG.md)
+- [Roadmap](ROADMAP.md)
+
+---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on how to contribute to this project.
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md).
 
 ### Development Setup
 
@@ -104,82 +152,38 @@ Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTIN
 6. Push to the branch: `git push origin feature/your-feature`
 7. Create a new Pull Request
 
+Please also see our [Code of Conduct](CODE_OF_CONDUCT.md) and [Security Policy](SECURITY.md).
+
+---
+
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
 
 ## 📬 Contact
 
-For any questions or suggestions, please reach out to us at [your.email@example.com](mailto:your.email@example.com) or open an issue on our [GitHub repository](https://github.com/the-solution-desk/organiserpro).
+For questions or suggestions, please [open an issue](https://github.com/the-solution-desk/organiserpro/issues) or email [opensource@thesolutiondesk.com](mailto:opensource@thesolutiondesk.com).
 
 > **Note for Ubuntu/Debian/Python 3.12+ users:**  
-> If you try to install system-wide with pip, you may see an `externally-managed-environment` error due to recent changes in Python packaging (PEP 668).  
+> If you try to install system-wide with pip, you may see an `externally-managed-environment` error due to recent Python packaging changes ([PEP 668](https://peps.python.org/pep-0668/)).  
 > Using a virtual environment avoids this problem and keeps your Python setup clean.
 
 For more help, see the [Python packaging user guide](https://packaging.python.org/tutorials/installing-packages/).
 
 ---
 
-## 🏁 Quickstart
-
-Sort your Downloads folder by file type:
-
-```bash
-organiserpro sort --directory ~/Downloads
-```
-
-Remove duplicate files in a folder:
-
-```bash
-organiserpro deduplicate --directory ~/Pictures
-```
-
-*Preview actions before making changes:*
-
-```bash
-organiserpro sort --directory ~/Documents --dry-run
-```
-
-See more in the [Documentation](https://organiserpro.readthedocs.io/en/latest/).
-
----
-
-## 📸 Example Output
-
-```
-[16:32:01] Sorting 150 files in /Users/you/Downloads
-┣━━ Images (43)
-┣━━ Documents (58)
-┣━━ Archives (22)
-┣━━ Others (27)
-✔ All files sorted in 2.3 seconds.
-```
----
-
-## 📚 Documentation
+## 🔗 Quick Links
 
 - [Full Documentation](https://organiserpro.readthedocs.io/en/latest/)
 - [Troubleshooting](TROUBLESHOOTING.md)
 - [Changelog](CHANGELOG.md)
 - [Roadmap](ROADMAP.md)
-
----
-
-## 🤝 Contributing
-
-We love contributions! Please see our [Contributing Guide](CONTRIBUTING.md), [Code of Conduct](CODE_OF_CONDUCT.md), and [Security Policy](SECURITY.md).
-
----
-
-## 🛡 License
-
-[MIT License](LICENSE) © [The Solution Desk](https://github.com/the-solution-desk)
-
----
-
-## 💬 Need Help?
-
-- Open an [issue](https://github.com/the-solution-desk/organiserpro/issues)
-- Join the discussion or reach out via [Discussions](https://github.com/the-solution-desk/organiserpro/discussions)
+- [Contributing Guide](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security Policy](SECURITY.md)
+- [Open an Issue](https://github.com/the-solution-desk/organiserpro/issues)
+- [Start a Discussion](https://github.com/the-solution-desk/organiserpro/discussions)
 
 ---
