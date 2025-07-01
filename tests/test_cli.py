@@ -1,11 +1,8 @@
 """Tests for the OrganiserPro.cli module."""
 
-import os
-import shutil
 import sys
 from pathlib import Path
-from typing import Generator
-from unittest.mock import MagicMock, patch, Mock
+from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 from click.testing import CliRunner
@@ -23,8 +20,8 @@ sys.modules["rich.text"] = Mock()
 sys.modules["rich.theme"] = Mock()
 sys.modules["rich.style"] = Mock()
 
-# Now import the cli module
-from OrganiserPro.cli import cli as cli_command
+# Now import the cli module after setting up mocks
+from OrganiserPro.cli import cli as cli_command  # noqa: E402
 
 
 @pytest.fixture
