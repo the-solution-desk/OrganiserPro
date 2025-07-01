@@ -55,7 +55,8 @@ def sort_by_date(directory: str, date_format: str, dry_run: bool) -> int:
     directory = str(Path(directory).resolve())
     if dry_run:
         console.print(
-            f"Would sort files by date with format '{date_format}' in directory: {directory}"
+            "Would sort files by date with format "
+            f"'{date_format}' in directory: {directory}"
         )
         return 0
     sort_by_date_impl(directory=directory, date_format=date_format, dry_run=dry_run)
