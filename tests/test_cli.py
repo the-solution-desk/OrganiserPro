@@ -35,8 +35,6 @@ def runner() -> CliRunner:
 
 def test_cli_help(runner: CliRunner) -> None:
     """Test the --help flag."""
-    from OrganiserPro.cli import cli as cli_command
-
     result = runner.invoke(cli_command, ["--help"])
     assert result.exit_code == 0
     assert "Show this message and exit." in result.output
@@ -49,8 +47,6 @@ def test_cli_help(runner: CliRunner) -> None:
 def test_cli_version(runner: CliRunner) -> None:
     """Test the --version flag."""
     from OrganiserPro import __version__
-    from OrganiserPro.cli import cli as cli_command
-
     result = runner.invoke(cli_command, ["--version"])
     assert result.exit_code == 0
     assert f"organiserpro, version {__version__}" in result.output
@@ -58,8 +54,6 @@ def test_cli_version(runner: CliRunner) -> None:
 
 def test_cli_no_args_shows_help(runner: CliRunner) -> None:
     """Test that running with no arguments shows help."""
-    from OrganiserPro.cli import cli as cli_command
-
     result = runner.invoke(cli_command, [])
     assert result.exit_code == 0
     assert "FileOrganizer - Organize your files with ease" in result.output
@@ -87,8 +81,6 @@ def test_cli_sort_type(mock_sort: MagicMock, runner: CliRunner, temp_dir: Path) 
 @patch("OrganiserPro.commands.sort_by_date_impl")
 def test_cli_sort_date(mock_sort: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
     """Test the sort-by-date command."""
-    from OrganiserPro.cli import cli as cli_command
-
     result = runner.invoke(cli_command, ["sort-by-date", str(temp_dir)])
     assert result.exit_code == 0
     # Check that the implementation was called with the correct arguments
@@ -135,8 +127,6 @@ def test_cli_dedup_recursive(
     mock_dedupe: MagicMock, runner: CliRunner, temp_dir: Path
 ) -> None:
     """Test the dedupe --recursive flag."""
-    from OrganiserPro.cli import cli as cli_command
-
     result = runner.invoke(cli_command, ["dedupe", str(temp_dir), "--recursive"])
     assert result.exit_code == 0
     mock_dedupe.assert_called_once_with(
@@ -154,8 +144,6 @@ def test_cli_dedup_dry_run(
     mock_console: MagicMock, mock_dedupe: MagicMock, runner: CliRunner, temp_dir: Path
 ) -> None:
     """Test the dedupe --dry-run flag."""
-    from OrganiserPro.cli import cli as cli_command
-
     # Setup console mock to capture print calls
     captured_output = []
 
@@ -181,8 +169,6 @@ def test_cli_dedup_delete(
     mock_dedupe: MagicMock, runner: CliRunner, temp_dir: Path
 ) -> None:
     """Test the dedupe --delete flag."""
-    from OrganiserPro.cli import cli as cli_command
-
     result = runner.invoke(cli_command, ["dedupe", str(temp_dir), "--delete"])
     assert result.exit_code == 0
     mock_dedupe.assert_called_once_with(
@@ -206,8 +192,6 @@ def test_cli_dedup_move_to(
     # Set up the mock to return success
     mock_dedupe.return_value = 0
 
-    from OrganiserPro.cli import cli as cli_command
-
     result = runner.invoke(
         cli_command, ["dedupe", str(temp_dir), "--move-to", str(move_dir)]
     )
@@ -225,8 +209,6 @@ def test_cli_dedup_move_to(
 
 def test_cli_dedup_no_directory_fails(runner: CliRunner) -> None:
     """Test that dedupe with no directory fails."""
-    from OrganiserPro.cli import cli as cli_command
-
     result = runner.invoke(cli_command, ["dedupe"])
     assert result.exit_code != 0
     assert "Missing argument 'TARGET_DIR'" in result.output
