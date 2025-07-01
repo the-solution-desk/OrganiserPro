@@ -4,6 +4,7 @@ import hashlib
 import os
 import re
 from pathlib import Path
+from typing import Generator, Tuple
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -13,8 +14,12 @@ from OrganiserPro.dedupe import find_duplicates, get_file_hash, handle_duplicate
 
 # Mock the console and Progress for all tests
 @pytest.fixture(autouse=True)
-def mock_console_and_progress():
-    """Mock the console and Progress objects for all tests."""
+def mock_console_and_progress() -> Generator[Tuple[MagicMock, MagicMock], None, None]:
+    """Mock the console and Progress objects for all tests.
+    
+    Returns:
+        tuple[MagicMock, MagicMock]: A tuple containing the mock console and progress objects.
+    """
     with patch("OrganiserPro.dedupe.console") as mock_console, patch(
         "OrganiserPro.dedupe.Progress"
     ) as mock_progress:
@@ -34,16 +39,25 @@ def mock_console_and_progress():
 
         # Create a namespace to store the mocks
         class Mocks:
-            console = mock_console
-            progress = mock_progress
-            progress_instance = mock_progress_instance
-            task = mock_task
+            def __init__(self) -> None:
+                self.console = mock_console
+                self.progress = mock_progress
+                self.progress_instance = mock_progress_instance
+                self.task = mock_task
 
-        yield Mocks()
+        mocks = Mocks()
+        yield (mocks.console, mocks.progress)
 
 
 def strip_ansi(text: str) -> str:
-    """Remove ANSI escape sequences from a string."""
+    """Remove ANSI escape sequences from a string.
+    
+    Args:
+        text: The text containing ANSI escape sequences.
+        
+    Returns:
+        str: The text with ANSI escape sequences removed.
+    """
     ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
     return ansi_escape.sub("", text)
 
@@ -119,7 +133,7 @@ def test_find_duplicates_recursive(temp_dir: Path) -> None:
 
 
 def test_handle_duplicates_dry_run(
-    temp_dir: Path, mock_console_and_progress, capsys: pytest.CaptureFixture
+    temp_dir: Path, mock_console_and_progress: tuple[MagicMock, MagicMock], capsys: pytest.CaptureFixture[str]
 ) -> None:
     """Test handle_duplicates in dry run mode."""
     # Create test files with duplicate content
@@ -128,13 +142,13 @@ def test_handle_duplicates_dry_run(
     for file in files:
         file.write_text(content)
 
-    # Setup console mock to capture output
-    mock_console = mock_console_and_progress.console
+    # Unpack the mock objects
+    mock_console, _ = mock_console_and_progress
 
     # Create a list to capture print calls
-    printed_messages = []
+    printed_messages: list[str] = []
 
-    def capture_print(*args, **kwargs):
+    def capture_print(*args: object, **kwargs: object) -> None:
         # Convert all args to strings and join with spaces
         message = " ".join(str(arg) for arg in args)
         printed_messages.append(message)
@@ -160,7 +174,7 @@ def test_handle_duplicates_dry_run(
 
 
 def test_handle_duplicates_delete(
-    temp_dir: Path, mock_console_and_progress, capsys: pytest.CaptureFixture
+    temp_dir: Path, mock_console_and_progress: tuple[MagicMock, MagicMock], capsys: pytest.CaptureFixture[str]
 ) -> None:
     """Test handling duplicates with delete option."""
     # Create test files with same content
@@ -175,11 +189,11 @@ def test_handle_duplicates_delete(
     os.utime(file1, (file1_timestamp, file1_timestamp))
     os.utime(file2, (file2_timestamp, file2_timestamp))
 
-    # Setup console mock to capture output
-    mock_console = mock_console_and_progress.console
-    printed_messages = []
+    # Unpack the mock objects
+    mock_console, _ = mock_console_and_progress
+    printed_messages: list[str] = []
 
-    def capture_print(*args, **kwargs):
+    def capture_print(*args: object, **kwargs: object) -> None:
         message = " ".join(str(arg) for arg in args)
         printed_messages.append(message)
 

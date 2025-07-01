@@ -2,6 +2,7 @@
 
 import os
 from pathlib import Path
+from typing import Generator
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -11,8 +12,12 @@ from OrganiserPro.sorter import get_file_extension, sort_by_date, sort_by_type
 
 # Mock the console object for all tests
 @pytest.fixture(autouse=True)
-def mock_console():
-    """Mock the console object for all tests."""
+def mock_console() -> Generator[MagicMock, None, None]:
+    """Mock the console object for all tests.
+    
+    Returns:
+        MagicMock: A mock of the console object with a status context manager.
+    """
     with patch("OrganiserPro.sorter.console") as mock_console:
         # Mock the status context manager
         mock_status = MagicMock()

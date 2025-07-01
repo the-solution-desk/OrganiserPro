@@ -2,23 +2,25 @@
 
 import sys
 from pathlib import Path
+from types import ModuleType
+from typing import Generator, Tuple, cast
 from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 from click.testing import CliRunner
 
+from types import SimpleNamespace
+
 # Mock rich module and its submodules before importing cli
-sys.modules["rich"] = Mock()
-sys.modules["rich.console"] = Mock()
-sys.modules["rich.console"].Console = Mock()
-sys.modules["rich.progress"] = Mock()
-sys.modules["rich.progress"].Progress = Mock()
-sys.modules["rich.prompt"] = Mock()
-sys.modules["rich.prompt"].Confirm = Mock()
-sys.modules["rich.table"] = Mock()
-sys.modules["rich.text"] = Mock()
-sys.modules["rich.theme"] = Mock()
-sys.modules["rich.style"] = Mock()
+sys.modules["rich"] = MagicMock()
+# Cast to ModuleType to satisfy mypy
+sys.modules["rich.console"] = cast(ModuleType, SimpleNamespace(Console=MagicMock()))
+sys.modules["rich.progress"] = cast(ModuleType, SimpleNamespace(Progress=MagicMock()))
+sys.modules["rich.prompt"] = cast(ModuleType, SimpleNamespace(Confirm=MagicMock()))
+sys.modules["rich.table"] = MagicMock()
+sys.modules["rich.text"] = MagicMock()
+sys.modules["rich.theme"] = MagicMock()
+sys.modules["rich.style"] = MagicMock()
 
 # Now import the cli module after setting up mocks
 from OrganiserPro.cli import cli as cli_command  # noqa: E402
@@ -143,9 +145,9 @@ def test_cli_dedup_dry_run(
 ) -> None:
     """Test the dedupe --dry-run flag."""
     # Setup console mock to capture print calls
-    captured_output = []
+    captured_output: list[str] = []
 
-    def mock_print(*args, **kwargs):
+    def mock_print(*args: object, **kwargs: object) -> None:
         captured_output.append(" ".join(str(arg) for arg in args))
 
     mock_console.print.side_effect = mock_print
