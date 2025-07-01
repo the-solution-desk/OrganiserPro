@@ -88,7 +88,9 @@ def sort_by_type(directory: str, dry_run: bool = False) -> None:
     )
 
 
-def sort_by_date(directory: str, date_format: str = "%Y-%m", dry_run: bool = False) -> None:
+def sort_by_date(
+    directory: str, date_format: str = "%Y-%m", dry_run: bool = False
+) -> None:
     """
     Sort files into subdirectories based on file type, size, or date.
 

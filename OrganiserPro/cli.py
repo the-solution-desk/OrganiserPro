@@ -43,7 +43,7 @@ cli.add_command(dedupe)
 def sort_by_type_cmd(directory: str, dry_run: bool = False) -> int:
     """Legacy function for sort by type functionality."""
     from .commands import sort_by_type_impl
-    
+
     # Call the implementation directly
     sort_by_type_impl(directory=directory, dry_run=dry_run)
     return 0
@@ -52,7 +52,7 @@ def sort_by_type_cmd(directory: str, dry_run: bool = False) -> int:
 def sort_by_date_cmd(directory: str, date_format: str, dry_run: bool = False) -> int:
     """Legacy function for sort by date functionality."""
     from .sorter import sort_by_date as sort_by_date_impl
-    
+
     # Call the implementation directly
     sort_by_date_impl(directory=directory, date_format=date_format, dry_run=dry_run)
     return 0
@@ -81,7 +81,7 @@ def dedupe_cmd(
 ) -> int:
     """Legacy function for dedupe functionality."""
     from .dedupe import find_duplicates_cli
-    
+
     # Call the implementation directly
     find_duplicates_cli(
         directory=directory,
