@@ -18,7 +18,8 @@ def mock_console_and_progress() -> Generator[Tuple[MagicMock, MagicMock], None, 
     """Mock the console and Progress objects for all tests.
 
     Returns:
-        tuple[MagicMock, MagicMock]: A tuple containing the mock console and progress objects.
+        tuple[MagicMock, MagicMock]:
+            A tuple containing the mock console and progress objects.
     """
     with patch("OrganiserPro.dedupe.console") as mock_console, patch(
         "OrganiserPro.dedupe.Progress"
