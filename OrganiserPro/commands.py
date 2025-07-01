@@ -3,9 +3,6 @@
 from pathlib import Path
 from typing import Optional
 
-from pathlib import Path
-from typing import Optional
-
 import click
 from rich.console import Console
 

@@ -1,12 +1,10 @@
 import sys
-from pathlib import Path
 from typing import Optional
 
 import click
 from rich.console import Console
 
-from .dedupe import find_duplicates, find_duplicates_cli
-from .sorter import sort_by_type as sort_by_type_impl, sort_by_date as sort_by_date_impl
+from .commands import sort_by_type, sort_by_date, dedupe
 
 # Initialize console for rich output
 console = Console()
@@ -34,9 +32,6 @@ def cli(ctx):
         )
         ctx.exit(0)
 
-
-# Import and register commands directly
-from .commands import sort_by_type, sort_by_date, dedupe
 
 # Register all commands with the main CLI
 cli.add_command(sort_by_type)
@@ -68,18 +63,6 @@ def sort_by_size_cmd(directory: str, dry_run: bool = False) -> int:
 
 def sort_by_size(directory: str, dry_run: bool):
     """Sort files in DIRECTORY by size."""
-    console.print(f"[bold]Sorting files in:[/] {directory}")
-    console.print("[bold]Sort by:[/] size")
-
-    if dry_run:
-        console.print("[yellow]Dry run: No changes will be made")
-        console.print("Would sort files by size")
-    else:
-        console.print("Sorting by size is not yet implemented", style="yellow")
-
-
-def sort_by_size_cmd(directory: str, dry_run: bool = False):
-    """Shared implementation of sort by size functionality."""
     console.print(f"[bold]Sorting files in:[/] {directory}")
     console.print("[bold]Sort by:[/] size")
 
