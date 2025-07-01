@@ -12,6 +12,7 @@ from .sorter import sort_by_type as sort_by_type_impl, sort_by_date as sort_by_d
 console = Console()
 VERSION = "0.1.0"
 
+
 # Create the main CLI group
 @click.group(
     name="organiserpro",
@@ -28,8 +29,11 @@ def cli(ctx):
         click.echo("  sort-by-type    Sort files in DIRECTORY by file type")
         click.echo("  sort-by-date    Sort files in DIRECTORY by date")
         click.echo("  dedupe          Find and handle duplicate files in DIRECTORY")
-        click.echo("\nUse 'organiserpro COMMAND --help' for more information about a command.")
+        click.echo(
+            "\nUse 'organiserpro COMMAND --help' for more information about a command."
+        )
         ctx.exit(0)
+
 
 # Import and register commands directly
 from .commands import sort_by_type, sort_by_date, dedupe
@@ -39,23 +43,29 @@ cli.add_command(sort_by_type)
 cli.add_command(sort_by_date)
 cli.add_command(dedupe)
 
+
 # Keep these functions for backward compatibility with tests
 def sort_by_type_cmd(directory: str, dry_run: bool = False) -> int:
     """Legacy function for sort by type functionality."""
     from .commands import sort_by_type
+
     return sort_by_type.callback(directory, dry_run=dry_run)
 
 
 def sort_by_date_cmd(directory: str, date_format: str, dry_run: bool = False) -> int:
     """Legacy function for sort by date functionality."""
     from .commands import sort_by_date
+
     return sort_by_date.callback(directory, date_format=date_format, dry_run=dry_run)
 
 
 def sort_by_size_cmd(directory: str, dry_run: bool = False) -> int:
     """Legacy function for sort by size functionality."""
     from .commands import sort_by_size
+
     return sort_by_size.callback(directory, dry_run=dry_run)
+
+
 def sort_by_size(directory: str, dry_run: bool):
     """Sort files in DIRECTORY by size."""
     console.print(f"[bold]Sorting files in:[/] {directory}")
@@ -82,16 +92,22 @@ def sort_by_size_cmd(directory: str, dry_run: bool = False):
 
 
 # Legacy function for backwards compatibility with tests
-def dedupe_cmd(directory: str, recursive: bool = True, delete: bool = False, 
-              move_to: Optional[str] = None, dry_run: bool = False) -> int:
+def dedupe_cmd(
+    directory: str,
+    recursive: bool = True,
+    delete: bool = False,
+    move_to: Optional[str] = None,
+    dry_run: bool = False,
+) -> int:
     """Legacy function for dedupe command."""
     from .commands import dedupe as dedupe_func
+
     return dedupe_func(
         target_dir=directory,
         recursive=recursive,
         delete=delete,
         move_to=move_to,
-        dry_run=dry_run
+        dry_run=dry_run,
     )
 
 

@@ -79,8 +79,8 @@ def sort_by_date(directory: str, date_format: str, dry_run: bool) -> int:
     show_default=True,
 )
 @click.option(
-    "--delete", 
-    is_flag=True, 
+    "--delete",
+    is_flag=True,
     help="Delete duplicate files (keep first occurrence)",
     default=False,
 )
@@ -91,34 +91,42 @@ def sort_by_date(directory: str, date_format: str, dry_run: bool) -> int:
     default=None,
 )
 @click.option(
-    "--dry-run", 
-    is_flag=True, 
+    "--dry-run",
+    is_flag=True,
     help="Show what would be done without making changes",
     default=False,
 )
-def dedupe(target_dir: str, recursive: bool, delete: bool, move_to: Optional[str], dry_run: bool) -> int:
+def dedupe(
+    target_dir: str,
+    recursive: bool,
+    delete: bool,
+    move_to: Optional[str],
+    dry_run: bool,
+) -> int:
     """Find and handle duplicate files in DIRECTORY.
-    
+
     DIRECTORY: The directory to search for duplicate files in.
     """
     try:
         # Resolve the directory path
         resolved_dir = str(Path(target_dir).resolve())
-        
+
         if dry_run:
-            console.print(f"[yellow]Dry run: Would search for duplicates in {resolved_dir}")
+            console.print(
+                f"[yellow]Dry run: Would search for duplicates in {resolved_dir}"
+            )
             return 0
-            
+
         # Call the deduplication function
         from .dedupe import find_duplicates_cli
-        
+
         # Call the function with the resolved paths
         find_duplicates_cli(
             directory=resolved_dir,
             recursive=recursive,
             delete=delete,
             move_to=str(Path(move_to).resolve()) if move_to else None,
-            dry_run=dry_run
+            dry_run=dry_run,
         )
         return 0  # Success
     except Exception as e:

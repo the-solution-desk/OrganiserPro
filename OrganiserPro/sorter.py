@@ -3,6 +3,7 @@ from datetime import datetime
 from pathlib import Path
 
 from rich.console import Console
+
 console = Console()
 
 
@@ -123,9 +124,9 @@ def sort_by_date(directory: str, date_format: str = "%Y-%m") -> None:
                     mtime = file_path.stat().st_mtime
                     dt = datetime.fromtimestamp(mtime)
                     date_str = dt.strftime(
-                        date_format.replace("YYYY", "%Y").replace(
-                            "MM", "%m"
-                        ).replace("DD", "%d")
+                        date_format.replace("YYYY", "%Y")
+                        .replace("MM", "%m")
+                        .replace("DD", "%d")
                     )
 
                     # Create target directory if it doesn't exist
