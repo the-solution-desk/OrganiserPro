@@ -16,7 +16,7 @@ from OrganiserPro.dedupe import find_duplicates, get_file_hash, handle_duplicate
 @pytest.fixture(autouse=True)
 def mock_console_and_progress() -> Generator[Tuple[MagicMock, MagicMock], None, None]:
     """Mock the console and Progress objects for all tests.
-    
+
     Returns:
         tuple[MagicMock, MagicMock]: A tuple containing the mock console and progress objects.
     """
@@ -51,10 +51,10 @@ def mock_console_and_progress() -> Generator[Tuple[MagicMock, MagicMock], None, 
 
 def strip_ansi(text: str) -> str:
     """Remove ANSI escape sequences from a string.
-    
+
     Args:
         text: The text containing ANSI escape sequences.
-        
+
     Returns:
         str: The text with ANSI escape sequences removed.
     """
@@ -133,7 +133,9 @@ def test_find_duplicates_recursive(temp_dir: Path) -> None:
 
 
 def test_handle_duplicates_dry_run(
-    temp_dir: Path, mock_console_and_progress: Tuple[MagicMock, MagicMock], capsys: pytest.CaptureFixture[str]
+    temp_dir: Path,
+    mock_console_and_progress: Tuple[MagicMock, MagicMock],
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
     """Test handle_duplicates in dry run mode."""
     # Create test files with duplicate content
@@ -174,7 +176,9 @@ def test_handle_duplicates_dry_run(
 
 
 def test_handle_duplicates_delete(
-    temp_dir: Path, mock_console_and_progress: Tuple[MagicMock, MagicMock], capsys: pytest.CaptureFixture[str]
+    temp_dir: Path,
+    mock_console_and_progress: Tuple[MagicMock, MagicMock],
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
     """Test handling duplicates with delete option."""
     # Create test files with same content

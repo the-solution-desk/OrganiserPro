@@ -14,7 +14,7 @@ from OrganiserPro.sorter import get_file_extension, sort_by_date, sort_by_type
 @pytest.fixture(autouse=True)
 def mock_console() -> Generator[MagicMock, None, None]:
     """Mock the console object for all tests.
-    
+
     Returns:
         MagicMock: A mock of the console object with a status context manager.
     """
