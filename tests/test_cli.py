@@ -47,6 +47,7 @@ def test_cli_help(runner: CliRunner) -> None:
 def test_cli_version(runner: CliRunner) -> None:
     """Test the --version flag."""
     from OrganiserPro import __version__
+
     result = runner.invoke(cli_command, ["--version"])
     assert result.exit_code == 0
     assert f"organiserpro, version {__version__}" in result.output
