@@ -3,8 +3,8 @@
 import sys
 from pathlib import Path
 from types import ModuleType
-from typing import Generator, Tuple, cast
-from unittest.mock import MagicMock, Mock, patch
+from typing import cast
+from unittest.mock import MagicMock, patch
 
 import pytest
 from click.testing import CliRunner
