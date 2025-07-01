@@ -24,11 +24,12 @@ def get_file_extension(file_path: Path) -> str:
     return file_path.suffix[1:].lower()
 
 
-def sort_by_type(directory: str) -> None:
+def sort_by_type(directory: str, dry_run: bool = False) -> None:
     """Sort files in the given directory into subdirectories by file type.
 
     Args:
         directory: Path to the directory containing files to sort
+        dry_run: If True, only show what would be done without making changes
     """
     source_dir = Path(directory).expanduser().resolve()
 
@@ -87,7 +88,7 @@ def sort_by_type(directory: str) -> None:
     )
 
 
-def sort_by_date(directory: str, date_format: str = "%Y-%m") -> None:
+def sort_by_date(directory: str, date_format: str = "%Y-%m", dry_run: bool = False) -> None:
     """
     Sort files into subdirectories based on file type, size, or date.
 

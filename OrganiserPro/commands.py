@@ -33,7 +33,6 @@ def sort_by_type(directory: str, dry_run: bool) -> int:
             f"{', '.join(exts) if exts else 'No files found'}"
         )
         return 0
-    # Call with keyword arguments to match test expectations
     sort_by_type_impl(directory=directory, dry_run=dry_run)
     return 0
 
@@ -55,9 +54,10 @@ def sort_by_date(directory: str, date_format: str, dry_run: bool) -> int:
     """Sort files in DIRECTORY by date."""
     directory = str(Path(directory).resolve())
     if dry_run:
-        console.print(f"Would group files by date in format: {date_format}")
+        console.print(
+            f"Would sort files by date with format '{date_format}' in directory: {directory}"
+        )
         return 0
-    # Call with keyword arguments to match test expectations
     sort_by_date_impl(directory=directory, date_format=date_format, dry_run=dry_run)
     return 0
 

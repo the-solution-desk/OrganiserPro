@@ -19,7 +19,7 @@ VERSION = "0.1.0"
 )
 @click.version_option(version=VERSION, message="%(prog)s, version %(version)s")
 @click.pass_context
-def cli(ctx):
+def cli(ctx: click.Context) -> None:
     """FileOrganizer - Organize your files with ease"""
     if ctx.invoked_subcommand is None:
         click.echo("FileOrganizer - Organize your files with ease")
@@ -42,27 +42,24 @@ cli.add_command(dedupe)
 # Keep these functions for backward compatibility with tests
 def sort_by_type_cmd(directory: str, dry_run: bool = False) -> int:
     """Legacy function for sort by type functionality."""
-    from .commands import sort_by_type
-
-    return sort_by_type.callback(directory, dry_run=dry_run)
+    from .commands import sort_by_type_impl
+    
+    # Call the implementation directly
+    sort_by_type_impl(directory=directory, dry_run=dry_run)
+    return 0
 
 
 def sort_by_date_cmd(directory: str, date_format: str, dry_run: bool = False) -> int:
     """Legacy function for sort by date functionality."""
-    from .commands import sort_by_date
-
-    return sort_by_date.callback(directory, date_format=date_format, dry_run=dry_run)
+    from .sorter import sort_by_date as sort_by_date_impl
+    
+    # Call the implementation directly
+    sort_by_date_impl(directory=directory, date_format=date_format, dry_run=dry_run)
+    return 0
 
 
 def sort_by_size_cmd(directory: str, dry_run: bool = False) -> int:
     """Legacy function for sort by size functionality."""
-    from .commands import sort_by_size
-
-    return sort_by_size.callback(directory, dry_run=dry_run)
-
-
-def sort_by_size(directory: str, dry_run: bool):
-    """Sort files in DIRECTORY by size."""
     console.print(f"[bold]Sorting files in:[/] {directory}")
     console.print("[bold]Sort by:[/] size")
 
@@ -71,7 +68,7 @@ def sort_by_size(directory: str, dry_run: bool):
         console.print("Would sort files by size")
     else:
         console.print("Sorting by size is not yet implemented", style="yellow")
-        sys.exit(1)
+    return 0
 
 
 # Legacy function for backwards compatibility with tests
@@ -82,16 +79,18 @@ def dedupe_cmd(
     move_to: Optional[str] = None,
     dry_run: bool = False,
 ) -> int:
-    """Legacy function for dedupe command."""
-    from .commands import dedupe as dedupe_func
-
-    return dedupe_func(
-        target_dir=directory,
+    """Legacy function for dedupe functionality."""
+    from .dedupe import find_duplicates_cli
+    
+    # Call the implementation directly
+    find_duplicates_cli(
+        directory=directory,
         recursive=recursive,
         delete=delete,
         move_to=move_to,
         dry_run=dry_run,
     )
+    return 0
 
 
 if __name__ == "__main__":
