@@ -133,7 +133,7 @@ def test_find_duplicates_recursive(temp_dir: Path) -> None:
 
 
 def test_handle_duplicates_dry_run(
-    temp_dir: Path, mock_console_and_progress: tuple[MagicMock, MagicMock], capsys: pytest.CaptureFixture[str]
+    temp_dir: Path, mock_console_and_progress: Tuple[MagicMock, MagicMock], capsys: pytest.CaptureFixture[str]
 ) -> None:
     """Test handle_duplicates in dry run mode."""
     # Create test files with duplicate content
@@ -174,7 +174,7 @@ def test_handle_duplicates_dry_run(
 
 
 def test_handle_duplicates_delete(
-    temp_dir: Path, mock_console_and_progress: tuple[MagicMock, MagicMock], capsys: pytest.CaptureFixture[str]
+    temp_dir: Path, mock_console_and_progress: Tuple[MagicMock, MagicMock], capsys: pytest.CaptureFixture[str]
 ) -> None:
     """Test handling duplicates with delete option."""
     # Create test files with same content
