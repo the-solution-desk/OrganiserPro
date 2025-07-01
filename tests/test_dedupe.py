@@ -4,10 +4,42 @@ import hashlib
 import os
 import re
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 from OrganiserPro.dedupe import find_duplicates, get_file_hash, handle_duplicates
+
+
+# Mock the console and Progress for all tests
+@pytest.fixture(autouse=True)
+def mock_console_and_progress():
+    """Mock the console and Progress objects for all tests."""
+    with patch("OrganiserPro.dedupe.console") as mock_console, patch(
+        "OrganiserPro.dedupe.Progress"
+    ) as mock_progress:
+
+        # Mock the console status context manager
+        mock_status = MagicMock()
+        mock_console.status.return_value.__enter__.return_value = mock_status
+
+        # Mock the Progress context manager
+        mock_progress_instance = MagicMock()
+        mock_task = MagicMock()
+        mock_progress.return_value.__enter__.return_value = mock_progress_instance
+        mock_progress_instance.add_task.return_value = mock_task
+
+        # Make sure the progress.advance() call doesn't fail
+        mock_progress_instance.advance = MagicMock()
+
+        # Create a namespace to store the mocks
+        class Mocks:
+            console = mock_console
+            progress = mock_progress
+            progress_instance = mock_progress_instance
+            task = mock_task
+
+        yield Mocks()
 
 
 def strip_ansi(text: str) -> str:
@@ -87,7 +119,7 @@ def test_find_duplicates_recursive(temp_dir: Path) -> None:
 
 
 def test_handle_duplicates_dry_run(
-    temp_dir: Path, capsys: pytest.CaptureFixture
+    temp_dir: Path, mock_console_and_progress, capsys: pytest.CaptureFixture
 ) -> None:
     """Test handle_duplicates in dry run mode."""
     # Create test files with duplicate content
@@ -96,25 +128,39 @@ def test_handle_duplicates_dry_run(
     for file in files:
         file.write_text(content)
 
+    # Setup console mock to capture output
+    mock_console = mock_console_and_progress.console
+
+    # Create a list to capture print calls
+    printed_messages = []
+
+    def capture_print(*args, **kwargs):
+        # Convert all args to strings and join with spaces
+        message = " ".join(str(arg) for arg in args)
+        printed_messages.append(message)
+
+    # Redirect console.print to our capture function
+    mock_console.print.side_effect = capture_print
+
     # Run in dry run mode (no changes)
     duplicates = {"hash1": [files[0], files[1], files[2]]}
     handle_duplicates(duplicates, delete=False, move_to=None)
 
-    # Verify output
-    captured = capsys.readouterr()
-    output = captured.out
-    # Strip ANSI color codes before checking the output
+    # Check that the expected messages were printed
+    output = "\n".join(printed_messages)
     clean_output = strip_ansi(output)
+
+    # Check for the expected output - be flexible with rich formatting
     assert "Found 2 duplicate files in 1 groups" in clean_output
-    note_msg = "Note: Use --delete to remove duplicates or --move-to to move them"
-    assert note_msg in clean_output
+    # Check for the note message content, ignoring rich formatting
+    assert "Use --delete to remove duplicates or --move-to to move them" in clean_output
 
     # Verify no files were deleted or moved
     assert all(file.exists() for file in files)
 
 
 def test_handle_duplicates_delete(
-    temp_dir: Path, capsys: pytest.CaptureFixture
+    temp_dir: Path, mock_console_and_progress, capsys: pytest.CaptureFixture
 ) -> None:
     """Test handling duplicates with delete option."""
     # Create test files with same content
@@ -129,12 +175,23 @@ def test_handle_duplicates_delete(
     os.utime(file1, (file1_timestamp, file1_timestamp))
     os.utime(file2, (file2_timestamp, file2_timestamp))
 
+    # Setup console mock to capture output
+    mock_console = mock_console_and_progress.console
+    printed_messages = []
+
+    def capture_print(*args, **kwargs):
+        message = " ".join(str(arg) for arg in args)
+        printed_messages.append(message)
+
+    mock_console.print.side_effect = capture_print
+
+    # Run the function
     duplicates = {"hash1": [file1, file2]}
     handle_duplicates(duplicates, delete=True)
 
-    # Verify output
-    captured = capsys.readouterr()
-    assert "deleted" in captured.out.lower()
+    # Check the output
+    output = "\n".join(printed_messages).lower()
+    assert "deleted" in output
 
     # Check that only one file remains
     remaining_files = list(temp_dir.glob("*"))

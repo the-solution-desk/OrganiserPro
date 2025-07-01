@@ -3,12 +3,12 @@
 from pathlib import Path
 from typing import Optional
 
+from pathlib import Path
+from typing import Optional
+
 import click
 from rich.console import Console
 
-# Import click directly to avoid circular imports
-import click
-from .dedupe import find_duplicates_cli
 from .sorter import sort_by_type as sort_by_type_impl, sort_by_date as sort_by_date_impl
 
 console = Console()
@@ -115,6 +115,7 @@ def dedupe(
             console.print(
                 f"[yellow]Dry run: Would search for duplicates in {resolved_dir}"
             )
+            console.print("Dry run: No files will be modified")
             return 0
 
         # Call the deduplication function

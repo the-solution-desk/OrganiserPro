@@ -1,12 +1,30 @@
 """Tests for the OrganiserPro.cli module."""
 
+import os
+import shutil
+import sys
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from typing import Generator
+from unittest.mock import MagicMock, patch, Mock
 
 import pytest
 from click.testing import CliRunner
 
-from OrganiserPro import cli
+# Mock rich module and its submodules before importing cli
+sys.modules["rich"] = Mock()
+sys.modules["rich.console"] = Mock()
+sys.modules["rich.console"].Console = Mock()
+sys.modules["rich.progress"] = Mock()
+sys.modules["rich.progress"].Progress = Mock()
+sys.modules["rich.prompt"] = Mock()
+sys.modules["rich.prompt"].Confirm = Mock()
+sys.modules["rich.table"] = Mock()
+sys.modules["rich.text"] = Mock()
+sys.modules["rich.theme"] = Mock()
+sys.modules["rich.style"] = Mock()
+
+# Now import the cli module
+from OrganiserPro.cli import cli as cli_command
 
 
 @pytest.fixture
@@ -112,30 +130,6 @@ def test_cli_sort_no_args_uses_default(
     )
 
 
-@patch("OrganiserPro.commands.dedupe", return_value=0)
-def test_cli_dedup_dry_run(
-    mock_find: MagicMock, runner: CliRunner, temp_dir: Path
-) -> None:
-    """Test the dedupe command with --dry-run option."""
-    # Create a test file
-    (temp_dir / "test.txt").write_text("test")
-
-    # Mock the dedupe function to return some test data
-    mock_find.return_value = 0
-
-    from OrganiserPro.cli import cli as cli_command
-
-    result = runner.invoke(cli_command, ["dedupe", str(temp_dir), "--dry-run"])
-    assert result.exit_code == 0
-    mock_find.assert_called_once_with(
-        directory=str(temp_dir),
-        recursive=True,  # Default is True in CLI
-        delete=False,
-        move_to=None,
-        dry_run=True,
-    )
-
-
 @patch("OrganiserPro.dedupe.find_duplicates_cli")
 def test_cli_dedup_recursive(
     mock_dedupe: MagicMock, runner: CliRunner, temp_dir: Path
@@ -155,17 +149,31 @@ def test_cli_dedup_recursive(
 
 
 @patch("OrganiserPro.dedupe.find_duplicates_cli")
+@patch("OrganiserPro.commands.console")
 def test_cli_dedup_dry_run(
-    mock_dedupe: MagicMock, runner: CliRunner, temp_dir: Path
+    mock_console: MagicMock, mock_dedupe: MagicMock, runner: CliRunner, temp_dir: Path
 ) -> None:
     """Test the dedupe --dry-run flag."""
     from OrganiserPro.cli import cli as cli_command
 
+    # Setup console mock to capture print calls
+    captured_output = []
+
+    def mock_print(*args, **kwargs):
+        captured_output.append(" ".join(str(arg) for arg in args))
+
+    mock_console.print.side_effect = mock_print
+
     result = runner.invoke(cli_command, ["dedupe", str(temp_dir), "--dry-run"])
     assert result.exit_code == 0
+
     # Should not call the actual implementation in dry-run mode
     mock_dedupe.assert_not_called()
-    assert "Dry run" in result.output
+
+    # Check for the dry run messages in the captured output
+    output_text = "\n".join(captured_output)
+    assert "Dry run: Would search for duplicates in" in output_text
+    assert "Dry run: No files will be modified" in output_text
 
 
 @patch("OrganiserPro.dedupe.find_duplicates_cli")

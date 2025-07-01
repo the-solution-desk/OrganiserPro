@@ -2,10 +2,22 @@
 
 import os
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 from OrganiserPro.sorter import get_file_extension, sort_by_date, sort_by_type
+
+
+# Mock the console object for all tests
+@pytest.fixture(autouse=True)
+def mock_console():
+    """Mock the console object for all tests."""
+    with patch("OrganiserPro.sorter.console") as mock_console:
+        # Mock the status context manager
+        mock_status = MagicMock()
+        mock_console.status.return_value.__enter__.return_value = mock_status
+        yield mock_console
 
 
 def test_get_file_extension() -> None:
