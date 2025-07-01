@@ -171,6 +171,7 @@ def find_duplicates_cli(
     recursive: bool = False,
     delete: bool = False,
     move_to: Optional[str] = None,
+    dry_run: bool = False,
 ) -> None:
     """CLI interface for finding and handling duplicate files.
 
@@ -179,6 +180,7 @@ def find_duplicates_cli(
         recursive: If True, search subdirectories recursively
         delete: If True, delete duplicate files (keeping the oldest)
         move_to: If provided, move duplicate files to this directory instead of deleting
+        dry_run: If True, only show what would be done without making changes
     """
     console = Console()
 

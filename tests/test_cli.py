@@ -15,16 +15,14 @@ def runner() -> CliRunner:
 
 
 def test_cli_help(runner: CliRunner) -> None:
-    """Test the CLI help output."""
+    """Test the --help flag."""
     from OrganiserPro.cli import cli as cli_command
     result = runner.invoke(cli_command, ["--help"])
     assert result.exit_code == 0
     assert "Show this message and exit." in result.output
-    assert "sort" in result.output
+    assert "sort-by-type" in result.output
+    assert "sort-by-date" in result.output
     assert "dedupe" in result.output
-    assert (
-        "sort          Sort files in DIRECTORY by type, date, or size" in result.output
-    )
     assert "dedupe        Find and handle duplicate files in DIRECTORY" in result.output
 
 
@@ -36,7 +34,7 @@ def test_cli_version(runner: CliRunner) -> None:
     result = runner.invoke(cli_command, ["--version"])
     assert result.exit_code == 0
     assert (
-        f"cli, version {__version__}" in result.output
+        f"organiserpro, version {__version__}" in result.output
     )  
 
 
@@ -46,65 +44,76 @@ def test_cli_no_args_shows_help(runner: CliRunner) -> None:
     result = runner.invoke(cli_command, [])
     assert result.exit_code == 0
     assert "FileOrganizer - Organize your files with ease" in result.output
-    assert "sort     Sort files in DIRECTORY by type, date, or size" in result.output
-    assert "dedupe   Find and handle duplicate files in DIRECTORY" in result.output
+    assert "sort-by-type" in result.output
+    assert "sort-by-date" in result.output
+    assert "dedupe" in result.output
 
 
-@patch("OrganiserPro.cli.sort_by_type")
+@patch("OrganiserPro.commands.sort_by_type_impl")
 def test_cli_sort_type(mock_sort: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
-    """Test the sort --by type command."""
+    """Test the sort-by-type command."""
     # Create a test file
     (temp_dir / "test.txt").write_text("test")
 
     from OrganiserPro.cli import cli as cli_command
-    result = runner.invoke(cli_command, ["sort", str(temp_dir), "--by", "type"])
+    result = runner.invoke(cli_command, ["sort-by-type", str(temp_dir)])
     assert result.exit_code == 0
-    # The mock should be called with the resolved path
-    mock_sort.assert_called_once()
-    assert str(Path(temp_dir).resolve()) in str(mock_sort.call_args[0][0])
+    # The mock should be called with the resolved path as a keyword argument
+    mock_sort.assert_called_once_with(
+        directory=str(Path(temp_dir).resolve()),
+        dry_run=False
+    )
 
 
-@patch("OrganiserPro.cli.sort_by_date")
+@patch("OrganiserPro.commands.sort_by_date_impl")
 def test_cli_sort_date(mock_sort: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
-    """Test the sort --by date command."""
+    """Test the sort-by-date command."""
     from OrganiserPro.cli import cli as cli_command
-    result = runner.invoke(cli_command, ["sort", str(temp_dir), "--by", "date"])
+    result = runner.invoke(cli_command, ["sort-by-date", str(temp_dir)])
     assert result.exit_code == 0
-    mock_sort.assert_called_once_with(str(temp_dir), "%Y-%m", False)
+    # Check that the implementation was called with the correct arguments
+    mock_sort.assert_called_once_with(
+        directory=str(Path(temp_dir).resolve()),
+        date_format="%Y-%m",
+        dry_run=False
+    )
 
 
-@patch("OrganiserPro.cli.sort_by_date")
+@patch("OrganiserPro.commands.sort_by_date_impl")
 def test_cli_sort_date_with_format(
     mock_sort: MagicMock, runner: CliRunner, temp_dir: Path
 ) -> None:
-    """Test the sort --by date command with a custom format."""
+    """Test the sort-by-date command with a custom format."""
     from OrganiserPro.cli import cli as cli_command
     result = runner.invoke(
         cli_command,
-        ["sort", str(temp_dir), "--by", "date", "--date-format", "%Y/%m"],
+        ["sort-by-date", str(temp_dir), "--date-format", "%Y/%m"],
     )
     assert result.exit_code == 0
-    # The mock should be called with the resolved path and date_format as positional arguments
-    mock_sort.assert_called_once()
-    assert str(Path(temp_dir).resolve()) in str(mock_sort.call_args[0][0])
-    assert (
-        mock_sort.call_args[0][1] == "%Y/%m"
-    )  # Check date_format was passed correctlyond positional argument
+    # Check that the implementation was called with the correct arguments
+    mock_sort.assert_called_once_with(
+        directory=str(Path(temp_dir).resolve()),
+        date_format="%Y/%m",
+        dry_run=False
+    )
 
 
-@patch("OrganiserPro.cli.sort_by_type")
+@patch("OrganiserPro.commands.sort_by_type_impl")
 def test_cli_sort_no_args_uses_default(
     mock_sort: MagicMock, runner: CliRunner, temp_dir: Path
 ) -> None:
-    """Test that sort with no --by option uses the default (type)."""
+    """Test that sort-by-type works with default options."""
     from OrganiserPro.cli import cli as cli_command
-    result = runner.invoke(cli_command, ["sort", str(temp_dir)])
+    result = runner.invoke(cli_command, ["sort-by-type", str(temp_dir)])
     assert result.exit_code == 0
-    mock_sort.assert_called_once()
-    assert str(Path(temp_dir).resolve()) in str(mock_sort.call_args[0][0])
+    # The mock should be called with the resolved path
+    mock_sort.assert_called_once_with(
+        directory=str(Path(temp_dir).resolve()),
+        dry_run=False
+    )
 
 
-@patch("OrganiserPro.cli.dedupe", return_value=0)
+@patch("OrganiserPro.commands.dedupe", return_value=0)
 def test_cli_dedup_dry_run(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
     """Test the dedupe command with --dry-run option."""
     # Create a test file
@@ -125,65 +134,82 @@ def test_cli_dedup_dry_run(mock_find: MagicMock, runner: CliRunner, temp_dir: Pa
     )
 
 
-@patch("OrganiserPro.cli.dedupe", return_value=0)
-def test_cli_dedup_recursive(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
-    """Test the dedupe command with --recursive option."""
+@patch("OrganiserPro.dedupe.find_duplicates_cli")
+def test_cli_dedup_recursive(mock_dedupe: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
+    """Test the dedupe --recursive flag."""
     from OrganiserPro.cli import cli as cli_command
-    result = runner.invoke(cli_command, ["dedupe", str(temp_dir), "--recursive"])
+    result = runner.invoke(
+        cli_command, ["dedupe", str(temp_dir), "--recursive"]
+    )
     assert result.exit_code == 0
-    mock_find.assert_called_once_with(
-        directory=str(temp_dir),
+    mock_dedupe.assert_called_once_with(
+        directory=str(Path(temp_dir).resolve()),
         recursive=True,
         delete=False,
         move_to=None,
-        dry_run=False,
+        dry_run=False
     )
 
 
-@patch("OrganiserPro.cli.dedupe", return_value=0)
-def test_cli_dedup_delete(mock_find: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
-    """Test the dedupe command with --delete option."""
+@patch("OrganiserPro.dedupe.find_duplicates_cli")
+def test_cli_dedup_dry_run(mock_dedupe: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
+    """Test the dedupe --dry-run flag."""
     from OrganiserPro.cli import cli as cli_command
-    result = runner.invoke(cli_command, ["dedupe", str(temp_dir), "--delete"])
+    result = runner.invoke(
+        cli_command, ["dedupe", str(temp_dir), "--dry-run"]
+    )
     assert result.exit_code == 0
-    mock_find.assert_called_once_with(
-        directory=str(temp_dir),
-        recursive=True,  # Default is True in CLI
+    # Should not call the actual implementation in dry-run mode
+    mock_dedupe.assert_not_called()
+    assert "Dry run" in result.output
+
+
+@patch("OrganiserPro.dedupe.find_duplicates_cli")
+def test_cli_dedup_delete(mock_dedupe: MagicMock, runner: CliRunner, temp_dir: Path) -> None:
+    """Test the dedupe --delete flag."""
+    from OrganiserPro.cli import cli as cli_command
+    result = runner.invoke(
+        cli_command, ["dedupe", str(temp_dir), "--delete"]
+    )
+    assert result.exit_code == 0
+    mock_dedupe.assert_called_once_with(
+        directory=str(Path(temp_dir).resolve()),
+        recursive=True,  # Default is True
         delete=True,
         move_to=None,
-        dry_run=False,
+        dry_run=False
     )
 
 
-@patch("OrganiserPro.cli.dedupe", return_value=0)
+@patch("OrganiserPro.dedupe.find_duplicates_cli")
 def test_cli_dedup_move_to(
-    mock_find: MagicMock, runner: CliRunner, temp_dir: Path
+    mock_dedupe: MagicMock, runner: CliRunner, temp_dir: Path
 ) -> None:
-    """Test the dedupe command with --move-to option."""
+    """Test the dedupe --move-to flag."""
     # Create a directory to move duplicates to
     move_dir = temp_dir / "duplicates"
     move_dir.mkdir()
 
     # Set up the mock to return success
-    mock_find.return_value = 0
+    mock_dedupe.return_value = 0
 
     from OrganiserPro.cli import cli as cli_command
     result = runner.invoke(cli_command, ["dedupe", str(temp_dir), "--move-to", str(move_dir)])
     assert result.exit_code == 0
 
     # Check that find_duplicates was called with the correct arguments
-    mock_find.assert_called_once_with(
-        directory=str(temp_dir),
-        recursive=True,  # Default is True in CLI
-        delete=False,  # Not deleting, moving instead
-        move_to=str(move_dir),
-        dry_run=False,
+    mock_dedupe.assert_called_once_with(
+        directory=str(Path(temp_dir).resolve()),
+        recursive=True,  # Default is True
+        delete=False,
+        move_to=str(Path(move_dir).resolve()),
+        dry_run=False
     )
 
 
 def test_cli_dedup_no_directory_fails(runner: CliRunner) -> None:
-    """Test that dedupe command fails when no directory is provided."""
+    """Test that dedupe with no directory fails."""
     from OrganiserPro.cli import cli as cli_command
     result = runner.invoke(cli_command, ["dedupe"])
     assert result.exit_code != 0
-    assert "Missing argument 'DIRECTORY'" in result.output
+    assert "Missing argument 'TARGET_DIR'" in result.output
