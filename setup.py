@@ -10,11 +10,11 @@ setup(
     name="OrganiserPro",
     version="0.1.0",  # This will be overridden by setuptools_scm
     packages=find_packages(where="."),
-    python_requires=">=3.8,<3.13",
+    python_requires=">=3.8,<3.14",
     install_requires=requirements,
     entry_points={
         "console_scripts": [
-            "OrganiserPro=OrganiserPro.cli:main",
+            "organiserpro=OrganiserPro.cli:cli",
         ],
     },
     # Include package data files specified in MANIFEST.in
